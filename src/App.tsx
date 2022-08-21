@@ -19,6 +19,7 @@ import Plans from './pages/plans'
 import Payments from './pages/payments'
 import Subscription from './pages/subscriptions'
 import ErrorPage from './pages/ErrorPage'
+import Cookies from 'universal-cookie'
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24
 const queryClient = new QueryClient({
@@ -47,8 +48,12 @@ const queryClient = new QueryClient({
 // }
 
 const App = () => {
+  const cookie = new Cookies()
+  const XSRFToken = cookie.get('XSRF-TOKEN')
+
   axios.defaults.baseURL = `${process.env.API_HOST}/v1`
   axios.defaults.withCredentials = true
+  axios.defaults.headers.common['X-CSRF-TOKEN'] = XSRFToken
 
   axios.interceptors.response.use(
     (res) => res,

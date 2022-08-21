@@ -1,10 +1,11 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import Confirmation from '../../components/ui/confirmation'
 import { useNotify } from '../../contexts/notify'
 import { handleDeleteSuccess } from '../../helpers/userHelper'
 import { Badge } from '../../styled/badge'
@@ -20,6 +21,8 @@ const Details = ({
   localUser: Record<string, any>
   roles: Array<Record<string, any>>
 }) => {
+  const [showDelete, setShowDelete] = useState(false)
+
   const queryClient = useQueryClient()
   const { setNotify } = useNotify()
   const activeSub = (localUser && localUser.current_subscription) || null
@@ -52,6 +55,28 @@ const Details = ({
   return (
     <Fragment>
       <Wrapper>
+        <Confirmation title="Delete" msg="Are you sure?" show={showDelete}>
+          <Button
+            btnType="primary"
+            size="lg"
+            onClick={() => setShowDelete(false)}
+            disabled={delMutation.isLoading}
+          >
+            Cancel
+          </Button>
+          <Button
+            btnType="ghost"
+            size="lg"
+            onClick={() => showDelete && deleteUser(localUser._id)}
+            disabled={delMutation.isLoading}
+          >
+            {delMutation.isLoading ? (
+              <Spinner size="1.2rem" type="white" />
+            ) : (
+              'Delete'
+            )}
+          </Button>
+        </Confirmation>
         <HeadingWrapper>
           <h3>Provider Details</h3>
         </HeadingWrapper>
@@ -223,14 +248,10 @@ const Details = ({
         <Button
           btnType="danger"
           size="xl"
-          onClick={() => deleteUser(localUser._id)}
-          disabled={delMutation.isLoading}
+          onClick={() => setShowDelete(true)}
+          disabled={delMutation.isLoading || showDelete}
         >
-          {delMutation.isLoading ? (
-            <Spinner type="white" size="1.4rem" />
-          ) : (
-            <Fragment>Permanently Delete User</Fragment>
-          )}
+          Permanently Delete User
         </Button>
       </Wrapper>
     </Fragment>

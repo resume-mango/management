@@ -43,7 +43,7 @@ export const fetchAuthData = async (
       ) {
         cookies.remove('rm_ia', {
           path: '/',
-          domain: process.env.AUTH0_COOKIE_DOMAIN,
+          domain: process.env.COOKIE_DOMAIN,
         })
         console.log('hit', location)
         window.location.href = location
