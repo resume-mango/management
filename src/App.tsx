@@ -53,12 +53,45 @@ const App = () => {
   const [csrf, setCsrf] = useState(XSRFToken)
   axios.defaults.baseURL = `${process.env.API_HOST}/v1`
   axios.defaults.withCredentials = true
-  axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
 
   useEffect(() => {
     if (!XSRFToken) return
     setCsrf(XSRFToken)
   }, [XSRFToken])
+
+  axios.interceptors.request.use(
+    async (config: any) => {
+      if (config.method && !['get', 'options'].includes(config.method)) {
+        if (
+          !config.headers ||
+          !config.headers.common ||
+          !config.headers.common['X-CSRF-TOKEN' as any]
+        ) {
+          if (csrf) {
+            config.headers.common['X-CSRF-TOKEN'] = csrf
+          } else {
+            await axios
+              .request({
+                method: 'GET',
+                url: '/csrf',
+              })
+              .then((req: any) => {
+                if (!req.data || !req.data.token) Promise.reject('Invalid CSRF')
+                config.headers.common['X-CSRF-TOKEN'] = req.data.token
+                return
+              })
+              .catch((_err) => {
+                Promise.reject('Failed to sync CSRF')
+              })
+          }
+        }
+      }
+      return config
+    },
+    (error) => {
+      return Promise.reject(error)
+    }
+  )
 
   axios.interceptors.response.use(
     (res) => res,
