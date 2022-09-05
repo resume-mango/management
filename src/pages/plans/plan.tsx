@@ -12,7 +12,7 @@ const Plan = () => {
   const queryClient = useQueryClient()
   const { setNotify } = useNotify()
 
-  const handleSave = (data: any): Promise<boolean> => {
+  const handleSave = (data: any): Promise<any> => {
     return mutateEditPlan
       .mutateAsync(data)
       .then((_val) => true)
@@ -23,7 +23,7 @@ const Plan = () => {
     (planData) => axios.patch(`/management/plan/${id}`, planData),
     {
       onSuccess: (res: any) => {
-        queryClient.setQueryData(['plan', res._id], res.data)
+        res && res._id && queryClient.setQueryData(['plan', res._id], res.data)
       },
       onError: ({ _response }) => {
         setNotify({
@@ -60,8 +60,11 @@ const Plan = () => {
   const initialData = {
     name: data.name || '',
     description: data.description || '',
+    label: data.label || '',
     price: data.price || 0,
-    interval: data.interval || 'month',
+    interval: data.interval || 'day',
+    interval_count: data.interval_count || 1,
+    payment_type: data.payment_type || 'one_time',
     highlights: data.highlights || [],
     type: data.type,
     stripe: {

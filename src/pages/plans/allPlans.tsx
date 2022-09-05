@@ -60,7 +60,14 @@ const AllPlans = () => {
                           <b>Type</b>
                           <p className="capitalize">{item.type}</p>
                           <b>Billing Interval</b>
-                          <p>Every 1 {item.interval}</p>
+                          {item.payment_type === 'one_time' ? (
+                            <p>One Time</p>
+                          ) : (
+                            <p>
+                              Every {item.interval_count} {item.interval}
+                            </p>
+                          )}
+
                           <b>Price</b>
                           <p>{item.price.toFixed(2)} CAD</p>
                         </ListWrapper>

@@ -24,9 +24,12 @@ import { GridForm } from '../../styled/form'
 interface IForm {
   name: string
   desription: string
+  label: string
   type: string
   price: number
   interval: string
+  payment_type: 'one_time' | 'recurring'
+  interval_count: number
   highlights: Array<{ key: string; bool: boolean }>
   stripe: {
     priceId: string
@@ -35,13 +38,14 @@ interface IForm {
 }
 
 interface IProps {
-  handleSave: (data: Record<string, any>) => boolean
+  handleSave: (data: Record<string, any>) => any
   initialData?: Record<string, any>
   id: string
 }
 
 const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
   const [showInterval, setShowInterval] = useState(false)
+  const [showPayment, setShowPayment] = useState(false)
 
   const [refData, setRefData] = useState<Record<string, any>>({})
   const [refError, setRefError] = useState<Record<string, any>>({})
@@ -69,7 +73,9 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
 
   const planType = watch('type')
   const interval = watch('interval')
-  const amount = Number(watch('price') as any).toFixed(2)
+  const interval_count = watch('interval_count')
+  const paymentType = watch('payment_type')
+  const amount = Number(watch('price') as any)
   const name = watch('name')
   const stripe = watch('stripe')
 
@@ -78,15 +84,23 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
     name: 'highlights', // unique name for your Field Array
   })
 
-  const handleForm = (data: Record<string, any>) => {
-    const updated = handleSave(data)
+  const handleForm = async (data: Record<string, any>) => {
+    const updated = await handleSave(data)
     if (updated) reset({}, { keepValues: true })
     return updated
   }
 
-  const handleInterval = (interval: string) => {
-    setValue('interval', interval, { shouldDirty: true, shouldValidate: true })
+  const handleInterval = (val: string) => {
+    if (val !== interval) {
+      setValue('interval', val, { shouldDirty: true, shouldValidate: true })
+    }
     setShowInterval(false)
+  }
+  const handlePaymentType = (val: 'one_time' | 'recurring') => {
+    if (val !== paymentType) {
+      setValue('payment_type', val, { shouldDirty: true, shouldValidate: true })
+    }
+    setShowPayment(false)
   }
 
   useEffect(() => {
@@ -107,31 +121,32 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
       if (!price.active) warnings.push(`Stripe price is Inactive`)
 
       const stripeAmt = Number(price.unit_amount) / 100
-      if (stripeAmt.toFixed(2) !== amount) {
+      if (stripeAmt !== Number(amount)) {
         warnings.push(
-          `Stripe amount (${stripeAmt.toFixed(
-            2
-          )}) doesn't matches current plan amount (${amount})`
+          `Stripe amount (${stripeAmt}) doesn't matches current plan amount (${amount})`
         )
       }
+
       if (price.recurring) {
         if (price.recurring.interval !== interval) {
           warnings.push(
             `Stripe interval (${price.recurring.interval}) doesn't matches current plan interval (${interval})`
           )
         }
-        if (price.recurring.interval_count !== 1) {
+        if (Number(price.recurring.interval_count) !== Number(interval_count)) {
           warnings.push(
-            `Stripe interval count should be 1 but recieved (${price.recurring.interval_count})`
+            `Stripe interval count should be (${interval_count}) but recieved (${price.recurring.interval_count})`
           )
         }
       } else {
-        warnings.push(`Stripe price is not recurring price`)
+        warnings.push(
+          'Invalid subscription price, change price to recurring on stripe dashboard'
+        )
       }
     }
 
     setRefWarnings(warnings)
-  }, [refData, amount, interval])
+  }, [refData, amount, interval, interval_count, paymentType])
 
   const handleRefData = async () => {
     if (stripe.priceId) {
@@ -143,7 +158,7 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
       })
       if (error) {
         setRefData({})
-        if (error.response.data.error) {
+        if (error.response && error.response.data.error) {
           setRefError({
             message: error.response.data.error.message || '',
             data: error.response.data.error.data || '',
@@ -199,6 +214,7 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
                 disabled={true}
               />
             </GridForm>
+            <Input label="Plan Label" name="label" className="mb-2" />
             <TextArea
               style={{ resize: 'none', minHeight: '150px' }}
               className="mb-2"
@@ -278,12 +294,16 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
                             {refData.price.currency.toUpperCase()}
                           </p>
                           <p>Billing Interval</p>
-                          <p>
-                            Every&nbsp;
-                            {refData.price.recurring.interval_count}
-                            &nbsp;
-                            {refData.price.recurring.interval}
-                          </p>
+                          {refData.price.recurring ? (
+                            <p>
+                              Every&nbsp;
+                              {refData.price.recurring.interval_count}
+                              &nbsp;
+                              {refData.price.recurring.interval}
+                            </p>
+                          ) : (
+                            <p>One Time</p>
+                          )}
                         </DataWrapper>
                       </Fragment>
                     )}
@@ -354,31 +374,72 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
             {planType !== 'free' && (
               <SingleWrapper>
                 <div className="mb-2">
-                  <label>Payment Interval</label>
+                  <label>Payment Type</label>
                   <GhostDropButton
                     vertical="bottom"
                     horizontal="left"
-                    show={showInterval}
-                    setShow={setShowInterval}
+                    show={showPayment}
+                    setShow={setShowPayment}
                   >
                     <GhostDropButton.Button>
-                      <p>{interval}</p>
+                      <p>
+                        {paymentType === 'one_time' ? 'One Time' : paymentType}
+                      </p>
                       <DownArrowIcon />
                     </GhostDropButton.Button>
                     <GhostDropButton.Item>
-                      <a onClick={() => handleInterval('day')}>Day</a>
+                      <a onClick={() => handlePaymentType('one_time')}>
+                        One Time
+                      </a>
                     </GhostDropButton.Item>
                     <GhostDropButton.Item>
-                      <a onClick={() => handleInterval('week')}>Week</a>
-                    </GhostDropButton.Item>
-                    <GhostDropButton.Item>
-                      <a onClick={() => handleInterval('month')}>Month</a>
-                    </GhostDropButton.Item>
-                    <GhostDropButton.Item>
-                      <a onClick={() => handleInterval('year')}>Year</a>
+                      <a onClick={() => handlePaymentType('recurring')}>
+                        Recurring
+                      </a>
                     </GhostDropButton.Item>
                   </GhostDropButton>
                 </div>
+                <Fragment>
+                  <div className="mb-2">
+                    <label>Payment Interval</label>
+                    <GhostDropButton
+                      vertical="bottom"
+                      horizontal="left"
+                      show={showInterval}
+                      setShow={setShowInterval}
+                    >
+                      <GhostDropButton.Button>
+                        <p>{interval}</p>
+                        <DownArrowIcon />
+                      </GhostDropButton.Button>
+                      <GhostDropButton.Item>
+                        <a onClick={() => handleInterval('day')}>Day</a>
+                      </GhostDropButton.Item>
+                      <GhostDropButton.Item>
+                        <a onClick={() => handleInterval('week')}>Week</a>
+                      </GhostDropButton.Item>
+                      <GhostDropButton.Item>
+                        <a onClick={() => handleInterval('month')}>Month</a>
+                      </GhostDropButton.Item>
+                      <GhostDropButton.Item>
+                        <a onClick={() => handleInterval('year')}>Year</a>
+                      </GhostDropButton.Item>
+                    </GhostDropButton>
+                  </div>
+
+                  <div className="mb-2">
+                    <Input
+                      label="Interval Count"
+                      type="number"
+                      placeholder="1"
+                      required
+                      name="interval_count"
+                      min="1"
+                      step="1"
+                    />
+                  </div>
+                </Fragment>
+
                 <div className="mb-2">
                   <Input
                     label="Price (USD)"
@@ -408,6 +469,7 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
                 isSubmitting ||
                 !isDirty ||
                 !isValid ||
+                Object.keys(refError).length > 0 ||
                 fetchingRef ||
                 refWarnings.length > 0
               }

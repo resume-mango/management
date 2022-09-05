@@ -6,7 +6,10 @@ const name = Yup.string()
 const description = Yup.string()
   .max(127, 'max 127 characters allowed!')
   .required('Required')
-const type = Yup.string().oneOf(['free', 'standard', 'premium']).required()
+const label = Yup.string()
+  .max(127, 'max 127 characters allowed!')
+  .required('Required')
+const type = Yup.string().oneOf(['starter', 'pro', 'ceo']).required()
 const price = Yup.number()
   .typeError('Invalid Number')
   .min(0, 'Min 0 value allowed')
@@ -23,6 +26,7 @@ const highlights = Yup.array().of(
 export const createPlanSchema = Yup.object().shape({
   name,
   description,
+  label,
   type,
   price,
   highlights,

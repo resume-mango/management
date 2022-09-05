@@ -49,18 +49,16 @@ const queryClient = new QueryClient({
 const cookie = new Cookies()
 
 const App = () => {
-  // const XSRFToken = cookie.get('XSRF-TOKEN')
-  // const [csrf, setCsrf] = useState(XSRFToken)
-  axios.defaults.xsrfCookieName = 'CSRF-TOKEN'
-  axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN'
+  const XSRFToken = cookie.get('XSRF-TOKEN')
+  const [csrf, setCsrf] = useState(XSRFToken)
   axios.defaults.baseURL = `${process.env.API_HOST}/v1`
   axios.defaults.withCredentials = true
-  // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+  axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
 
-  // useEffect(() => {
-  //   if (!XSRFToken) return
-  //   setCsrf(XSRFToken)
-  // }, [XSRFToken])
+  useEffect(() => {
+    if (!XSRFToken) return
+    setCsrf(XSRFToken)
+  }, [XSRFToken])
 
   axios.interceptors.response.use(
     (res) => res,

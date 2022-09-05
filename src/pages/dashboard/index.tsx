@@ -73,12 +73,12 @@ const Dashboard = () => {
                       <p className="value">{data.activeUsers}</p>
                     </div>
                     <div className="item">
-                      <p className="label">Standard</p>
-                      <p className="value">{data.standardUsers}</p>
+                      <p className="label">Pro Users</p>
+                      <p className="value">{data.proUsers}</p>
                     </div>
                     <div className="item">
-                      <p className="label">Premium</p>
-                      <p className="value">{data.premiumUsers}</p>
+                      <p className="label">CEO Users</p>
+                      <p className="value">{data.ceoUsers}</p>
                     </div>
                   </div>
                 </div>
