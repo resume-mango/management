@@ -135,7 +135,7 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
         }
         if (Number(price.recurring.interval_count) !== Number(interval_count)) {
           warnings.push(
-            `Stripe interval count should be (${interval_count}) but recieved (${price.recurring.interval_count})`
+            `Stripe interval count should be (${price.recurring.interval_count}) but recieved (${interval_count})`
           )
         }
       } else {
@@ -221,7 +221,7 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
               label="Plan Description"
               name="description"
             />
-            {planType !== 'free' && (
+            {planType !== 'starter' && (
               <div data-test-id="stripe-refrence">
                 <AlertMessage
                   className="mb-1"
@@ -371,7 +371,7 @@ const PlanForm: React.FC<IProps> = ({ handleSave, initialData, id }) => {
             >
               Add Highlight
             </Button>
-            {planType !== 'free' && (
+            {planType !== 'starter' && (
               <SingleWrapper>
                 <div className="mb-2">
                   <label>Payment Type</label>

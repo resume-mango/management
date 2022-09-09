@@ -10,16 +10,8 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import './public/fonts/style.css'
 import { useAuth } from './contexts/authProvider'
 import { Spinner } from './styled/loader'
-import DashboardLayout from './components/ui/dashboardLayout'
-import { useRoutes } from 'react-router-dom'
-import Dashboard from './pages/dashboard'
-import Users from './pages/users'
-import Blogs from './pages/blogs'
-import Plans from './pages/plans'
-import Payments from './pages/payments'
-import Subscription from './pages/subscriptions'
-import ErrorPage from './pages/ErrorPage'
 import Cookies from 'universal-cookie'
+import AllRoutes from './Routes'
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24
 const queryClient = new QueryClient({
@@ -136,65 +128,3 @@ const App = () => {
 }
 
 export default App
-
-const AllRoutes = () => {
-  const routes = useRoutes([
-    {
-      path: '*',
-      element: <ErrorPage title={'Page Not Found'} />,
-    },
-    {
-      path: '/access-denied',
-      element: <ErrorPage title={'Insufficient Permissions'} />,
-    },
-    {
-      path: '/',
-      element: (
-        <DashboardLayout>
-          <Dashboard />
-        </DashboardLayout>
-      ),
-    },
-    {
-      path: '/users/*',
-      element: (
-        <DashboardLayout>
-          <Users />
-        </DashboardLayout>
-      ),
-    },
-    {
-      path: '/blogs/*',
-      element: (
-        <DashboardLayout>
-          <Blogs />
-        </DashboardLayout>
-      ),
-    },
-    {
-      path: '/plans/*',
-      element: (
-        <DashboardLayout>
-          <Plans />{' '}
-        </DashboardLayout>
-      ),
-    },
-    {
-      path: '/payments/*',
-      element: (
-        <DashboardLayout>
-          <Payments />
-        </DashboardLayout>
-      ),
-    },
-    {
-      path: '/subscriptions/*',
-      element: (
-        <DashboardLayout>
-          <Subscription />{' '}
-        </DashboardLayout>
-      ),
-    },
-  ])
-  return routes
-}

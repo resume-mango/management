@@ -483,13 +483,6 @@ const EditBlog = () => {
                       </p>
                     </DetailsWrapper>
                     <FlexWrapper>
-                      {console.log(
-                        isSubmitting,
-                        !isDirty,
-                        isLoading,
-                        isDeleting,
-                        !isValid
-                      )}
                       <Button
                         btnType="primary"
                         size="lg"

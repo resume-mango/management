@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 import styled from 'styled-components'
 
 interface IProps {
@@ -47,6 +46,7 @@ const RichTextEditor = ({
 
   return (
     <Fragment>
+      <style></style>
       <Wrapper maxHeight={maxHeight} disabled={disabled} className="wrapper">
         <Controller
           name={name}

@@ -288,6 +288,18 @@ color: ${({ theme }) => theme.colors.primary};
   justify-content: center !important;
 }
 
+.flex-center {
+  flex: 1;
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.hide{
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+}
+
 .text-center {
   text-align: center;
 }
