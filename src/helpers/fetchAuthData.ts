@@ -24,7 +24,7 @@ export const fetchAuthData = async (
     .then((res: any) => {
       if (!res || !res.data) throw new Error('Failed')
 
-      if (res.data.user.role.indexOf('admin') === -1) {
+      if (!['admin', 'reviewer'].some((r) => res.data.user.role.includes(r))) {
         navigate('/access-denied', { replace: true })
         return false
       }

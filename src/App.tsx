@@ -81,7 +81,7 @@ const App = () => {
       return config
     },
     (error) => {
-      return Promise.reject(error)
+      throw error
     }
   )
 
@@ -89,14 +89,13 @@ const App = () => {
     (res) => res,
     (error) => {
       // error.response && console.log(error.response)
-
       if (
         error.response &&
         error.response.status &&
         error.response.status === 403
       ) {
         window.location.replace('/access-denied')
-      }
+      } else throw error
     }
   )
 

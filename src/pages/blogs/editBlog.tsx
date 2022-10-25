@@ -22,12 +22,7 @@ import Modal from '../../components/ui/modal'
 import Dropzone from '../../components/ui/dropzone'
 import { blogSchema } from '../../validations/blog'
 import { getSingleBlog } from '../../queries/blogsQueries'
-import {
-  apiDeleteBlog,
-  apiDeleteBlogImage,
-  apiUpdateBlog,
-  apiUploadBlogImage,
-} from '../../apis/blog'
+
 import RouterPrompt from '../../components/ui/routerPrompt'
 import {
   deleteBlogImage,

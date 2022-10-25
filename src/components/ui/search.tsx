@@ -9,6 +9,7 @@ interface IProps {
   setValue: (_val: string) => void
   handleSubmit: () => void
   style?: React.CSSProperties
+  btnType?: 'primary' | 'secondary'
 }
 
 const Search: React.FC<IProps> = ({
@@ -17,6 +18,7 @@ const Search: React.FC<IProps> = ({
   setValue,
   handleSubmit,
   style,
+  btnType,
 }) => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -40,9 +42,15 @@ const Search: React.FC<IProps> = ({
         onKeyPress={handleKeyPress}
         autoComplete="off"
       />
-      <span className="search-btn icon" onClick={handleSubmit}>
-        <BackArrow size="1.1rem" />
-      </span>
+      {btnType === 'secondary' ? (
+        <span className="search-btn btn" onClick={handleSubmit}>
+          Search
+        </span>
+      ) : (
+        <span className="search-btn icon" onClick={handleSubmit}>
+          <BackArrow size="1.1rem" />
+        </span>
+      )}
     </SearchWrapper>
   )
 }
@@ -73,9 +81,21 @@ const SearchWrapper = styled.div`
     width: 50px;
     align-items: center;
     justify-content: center;
+    transform: rotateY(180deg);
+  }
+  .btn {
+    font-size: 0.8rem;
+    background: #031849;
+    border-radius: 2px;
+    height: 40px;
+    width: fit-content;
+    padding: 0 1rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .search-btn {
-    transform: rotateY(180deg);
     cursor: pointer;
     &:hover {
       svg {

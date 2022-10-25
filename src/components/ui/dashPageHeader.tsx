@@ -6,6 +6,7 @@ interface ILayout {
   title: string | ReactElement<any, any>
   children?: ReactNode
   border?: boolean
+  style?: React.CSSProperties
 }
 
 const DashPageHeader: React.FC<ILayout> = ({
@@ -13,10 +14,11 @@ const DashPageHeader: React.FC<ILayout> = ({
   title,
   children,
   border = true,
+  style,
 }) => {
   return (
     <Fragment>
-      <Header border={border || false}>
+      <Header style={style} border={border || false}>
         <div>
           {name && <p>{name}</p>}
           {title && <h1>{title}</h1>}

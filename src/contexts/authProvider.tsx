@@ -7,10 +7,7 @@ import { useWindowFocus } from './windowFocus'
 type User = {
   firstName: string
   lastName: string
-  plan: {
-    name: string
-    expires_on: string
-  }
+  role: string[]
   ref: string
 }
 interface IContext {
@@ -24,7 +21,9 @@ const contextValues = {
   token: '',
   isLoading: true,
   user: {},
-  setUser: (_val: any) => {},
+  setUser: (_val: any) => {
+    return undefined
+  },
 }
 const AuthContext = React.createContext<IContext>(contextValues)
 

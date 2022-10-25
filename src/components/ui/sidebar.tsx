@@ -10,6 +10,7 @@ import CreditCardIcon from '../svgs/creditCard'
 import UserIcon from '../svgs/userIcon'
 import UsersIcon from '../svgs/usersIcon'
 import DiamondIcon from '../svgs/diamond'
+import { useAuth } from '../../contexts/authProvider'
 
 const Sidebar = () => {
   return (
@@ -35,6 +36,7 @@ const Sidebar = () => {
 }
 
 const Navlinks = () => {
+  const { user } = useAuth()
   const handleLogout = () => {
     window.location.href = `${process.env.AUTH_HOST}/auth/logout`
   }
@@ -44,41 +46,62 @@ const Navlinks = () => {
       <div>
         <h6>MENU</h6>
         <ul>
-          <li>
-            <NavLink to="/">
-              <DashboardIcon size="1.1rem" /> Dashboard
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/users">
-              <UsersIcon size="1.3rem" />
-              Users
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/plans">
-              <BoxIcon size="1.3rem" />
-              Plans
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/blogs">
-              <BlogIcon size="1.3rem" />
-              Blogs
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/subscriptions">
-              <DiamondIcon size="1.25rem" />
-              Subscriptions
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/payments">
-              <CreditCardIcon size="1.25rem" />
-              Payments
-            </NavLink>
-          </li>
+          {user.role && user.role.length > 0 ? (
+            <Fragment>
+              {user.role.includes('admin') ? (
+                <Fragment>
+                  <li>
+                    <NavLink to="/">
+                      <DashboardIcon size="1.1rem" /> Dashboard
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/users">
+                      <UsersIcon size="1.3rem" />
+                      Users
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/plans">
+                      <BoxIcon size="1.3rem" />
+                      Plans
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/blogs">
+                      <BlogIcon size="1.3rem" />
+                      Blogs
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/subscriptions">
+                      <DiamondIcon size="1.25rem" />
+                      Subscriptions
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/payments">
+                      <CreditCardIcon size="1.25rem" />
+                      Payments
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/resume-review">
+                      <CreditCardIcon size="1.25rem" />
+                      Resume Review
+                    </NavLink>
+                  </li>
+                </Fragment>
+              ) : user.role.includes('reviewer') ? (
+                <li>
+                  <NavLink to="/resume-review">
+                    <CreditCardIcon size="1.25rem" />
+                    Resume Review
+                  </NavLink>
+                </li>
+              ) : null}
+            </Fragment>
+          ) : null}
         </ul>
       </div>
       <div style={{ marginTop: '1.5rem' }}>
