@@ -249,27 +249,26 @@ const ReviewList = () => {
           )}
         </ModalWrapper>
       </Modal>
-      {!isError && (
-        <SearchWrapper>
-          <Search
-            placeholder={'Enter Review ID (eg : 634fbdc6f394c60b857d79e4)'}
-            value={searchValue}
-            setValue={setSearchValue}
-            handleSubmit={() => handleSearch()}
-            style={{ width: '60%' }}
-            btnType={'secondary'}
-          />
-          <Button
-            size="lg"
-            onClick={() => setShowModal(true)}
-            disabled={ids && ids.length === 0}
-          >
-            Assign Ticket
-          </Button>
-        </SearchWrapper>
-      )}
 
-      {!isError && !isLoading && (
+      <SearchWrapper>
+        <Search
+          placeholder={'Enter Review ID (eg : 634fbdc6f394c60b857d79e4)'}
+          value={searchValue}
+          setValue={setSearchValue}
+          handleSubmit={() => handleSearch()}
+          style={{ width: '60%' }}
+          btnType={'secondary'}
+        />
+        <Button
+          size="lg"
+          onClick={() => setShowModal(true)}
+          disabled={ids && ids.length === 0}
+        >
+          Assign Ticket
+        </Button>
+      </SearchWrapper>
+
+      {!isLoading && (
         <ToggleWrapper style={!isAdmin ? { maxWidth: '700px' } : {}}>
           <a className={!sort ? 'active' : ''} onClick={() => addSortToQuery()}>
             <span className="label">All Tickets</span>
@@ -336,11 +335,8 @@ const ReviewList = () => {
       )}
       <Wrapper>
         {isError ? (
-          <div
-            className="align-center"
-            style={{ height: '50vh', borderTop: '1px solid #e2e9f3' }}
-          >
-            <h3>Failed to load review tickets!</h3>
+          <div className="align-center" style={{ height: '50vh' }}>
+            <h3>No review tickets found!</h3>
           </div>
         ) : isLoading ? (
           <LoadingWrapper style={{ height: '50vh' }}>
@@ -472,10 +468,7 @@ const ReviewList = () => {
             </div>
           </Fragment>
         ) : (
-          <div
-            className="align-center"
-            style={{ height: '50vh', borderTop: '1px solid #e2e9f3' }}
-          >
+          <div className="align-center" style={{ height: '50vh' }}>
             <h3>No review tickets found!</h3>
           </div>
         )}
