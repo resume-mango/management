@@ -31,7 +31,7 @@ const ReviewList = () => {
 
   const { user } = useAuth()
 
-  const isAdmin = user && user.role.includes('admin')
+  const isAdmin = user && user.role && user.role.includes('admin')
 
   const [searchParams] = useSearchParams()
   const sort = searchParams.get('sort') as any
@@ -194,7 +194,7 @@ const ReviewList = () => {
         </Button>
       </Confirmation>
       <Modal show={showModal} setShow={setShowModal}>
-        <ModalWrapper>
+        <ModalWrapper data-test-id="select-reviewer">
           <div className="title">
             <h3>Select Reviewer</h3>
             <span className="close-icon" onClick={() => setShowModal(false)}>
@@ -263,20 +263,29 @@ const ReviewList = () => {
           size="lg"
           onClick={() => setShowModal(true)}
           disabled={ids && ids.length === 0}
+          data-test-id="assign-ticket"
         >
           Assign Ticket
         </Button>
       </SearchWrapper>
 
       {!isLoading && (
-        <ToggleWrapper style={!isAdmin ? { maxWidth: '700px' } : {}}>
-          <a className={!sort ? 'active' : ''} onClick={() => addSortToQuery()}>
+        <ToggleWrapper
+          style={!isAdmin ? { maxWidth: '700px' } : {}}
+          className="toggle-wrapper"
+        >
+          <a
+            data-test-id="all-tickets"
+            className={!sort ? 'active' : ''}
+            onClick={() => addSortToQuery()}
+          >
             <span className="label">All Tickets</span>
             <span className="count">
               {(data && data.count && data.count.total) || 0}
             </span>
           </a>
           <a
+            data-test-id="urgent-tickets"
             className={sort && sort === 'urgent-tickets' ? 'active' : ''}
             onClick={() => addSortToQuery('urgent-tickets')}
           >
@@ -287,6 +296,7 @@ const ReviewList = () => {
             </span>
           </a>
           <a
+            data-test-id="open-tickets"
             className={sort && sort === 'open-tickets' ? 'active' : ''}
             onClick={() => addSortToQuery('open-tickets')}
           >
@@ -298,6 +308,7 @@ const ReviewList = () => {
           {isAdmin && (
             <Fragment>
               <a
+                data-test-id="assigned-tickets"
                 className={sort && sort === 'assigned-tickets' ? 'active' : ''}
                 onClick={() => addSortToQuery('assigned-tickets')}
               >
@@ -308,6 +319,7 @@ const ReviewList = () => {
                 </span>
               </a>
               <a
+                data-test-id="unassigned-tickets"
                 className={
                   sort && sort === 'unassigned-tickets' ? 'active' : ''
                 }
@@ -318,11 +330,12 @@ const ReviewList = () => {
                 <span className="count">
                   {(data && data.count && data.count.unassignedTickets) || 0}
                 </span>
-              </a>{' '}
+              </a>
             </Fragment>
           )}
 
           <a
+            data-test-id="completed-tickets"
             className={sort && sort === 'completed' ? 'active' : ''}
             onClick={() => addSortToQuery('completed')}
           >
@@ -333,7 +346,7 @@ const ReviewList = () => {
           </a>
         </ToggleWrapper>
       )}
-      <Wrapper>
+      <Wrapper data-test-id="list-wrapper">
         {isError ? (
           <div className="align-center" style={{ height: '50vh' }}>
             <h3>No review tickets found!</h3>
@@ -371,7 +384,7 @@ const ReviewList = () => {
             </ListItemWrapper>
             <div>
               {data.items.map((item: Record<string, any>, i: number) => (
-                <ListItemWrapper key={i}>
+                <ListItemWrapper key={i} data-test-id="list-item">
                   {[
                     'urgent-tickets',
                     'open-tickets',
@@ -419,7 +432,7 @@ const ReviewList = () => {
                         )}
                       </div>
                     </div>
-                    <p className="grey truncate item">#{item._id}</p>
+                    <p className="grey truncate item list_id">#{item._id}</p>
                     <p className="capitalize item item-status truncate">
                       <span>{item.status || '-'}</span>
                     </p>
@@ -441,25 +454,46 @@ const ReviewList = () => {
                   ? sort === 'urgent-tickets'
                     ? data.count.urgentTickets
                     : sort === 'open-tickets'
-                    ? data.openTickets
+                    ? data.count.openTickets
+                    : sort === 'assigned-tickets'
+                    ? data.count.assignedTickets
+                    : sort === 'unassigned-tickets'
+                    ? data.count.unassignedTickets
                     : sort === 'completed'
-                    ? data.completedTickets
+                    ? data.count.completedTickets
                     : data.count.total
                   : data.count.total) > data.limit && (
-                  <PaginationWrapper>
+                  <PaginationWrapper data-test-id="pagination">
                     <Button
                       btnType="secondary"
                       disabled={page === 0}
                       onClick={() => handlePage('prev')}
+                      data-test-id="pagination-prev"
                     >
                       Previous
                     </Button>
                     <Button
                       btnType="secondary"
                       disabled={
-                        page + 1 >= Math.ceil(data.count.total / data.limit)
+                        page + 1 >=
+                        Math.ceil(
+                          (sort
+                            ? sort === 'urgent-tickets'
+                              ? data.count.urgentTickets
+                              : sort === 'open-tickets'
+                              ? data.count.openTickets
+                              : sort === 'assigned-tickets'
+                              ? data.count.assignedTickets
+                              : sort === 'unassigned-tickets'
+                              ? data.count.unassignedTickets
+                              : sort === 'completed'
+                              ? data.count.completedTickets
+                              : data.count.total
+                            : data.count.total) / data.limit
+                        )
                       }
                       onClick={() => handlePage('next')}
+                      data-test-id="pagination-next"
                     >
                       Next
                     </Button>

@@ -40,8 +40,13 @@ interface IMessageBox {
 
 const Embed = Quill.import('blots/embed')
 
-const emojiHTML = (value: string) =>
-  ReactDOMServer.renderToString(<Emoji unified={value} size={20} />)
+const emojiHTML = (value: string) => {
+  try {
+    return ReactDOMServer.renderToString(<Emoji unified={value} size={20} />)
+  } catch (err) {
+    return null
+  }
+}
 
 class EmojiBolt extends Embed {
   static create(value: string) {
@@ -181,7 +186,7 @@ const MessageBox = ({
 
   const insertEmoji = async (emojiData: EmojiClickData, _event: MouseEvent) => {
     setShow(null)
-    if (!quillRef) return
+    if (!quillRef || !emojiData || !emojiData.unified) return
     const editor = quillRef.current.editor
     if (!editor) return
     const selection = await editor.getSelection()
@@ -341,17 +346,18 @@ const MessageBox = ({
                 },
               }}
             />
-
-            {files.map((file, i) => (
-              <AttachementUpload
-                key={i}
-                file={file}
-                index={i}
-                onSuccess={handleFileSuccess}
-                onDone={handleFileDone}
-                handeRemoveFile={handleRemoveFile}
-              />
-            ))}
+            <div data-test-id="attachments">
+              {files.map((file, i) => (
+                <AttachementUpload
+                  key={i}
+                  file={file}
+                  index={i}
+                  onSuccess={handleFileSuccess}
+                  onDone={handleFileDone}
+                  handeRemoveFile={handleRemoveFile}
+                />
+              ))}
+            </div>
             <Button
               className="send-btn"
               disabled={
