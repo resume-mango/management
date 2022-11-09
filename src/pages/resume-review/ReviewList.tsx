@@ -445,7 +445,33 @@ const ReviewList = () => {
                           : item.assignedTo.email
                         : 'Not assigned'}
                     </p>
-                    <p className="item truncate">New Message</p>
+                    <p
+                      className="item"
+                      style={{ display: 'flex', alignItems: 'center' }}
+                    >
+                      {item.current_status ? (
+                        item.current_status.reviewer === 'new_message' ? (
+                          <Fragment>
+                            <span className="truncate">New message </span>
+                            <span className="circle green" />
+                          </Fragment>
+                        ) : item.current_status.reviewer === 'awaiting' ? (
+                          <Fragment>
+                            <span className="truncate">Awaiting Response</span>
+                            <span className="circle yellow" />
+                          </Fragment>
+                        ) : item.current_status.reviewer === 'reviewed' ? (
+                          <Fragment>
+                            <span className="truncate"> Reviewed </span>
+                            <span className="circle grey" />
+                          </Fragment>
+                        ) : (
+                          '-'
+                        )
+                      ) : (
+                        '-'
+                      )}
+                    </p>
                   </ListItem>
                 </ListItemWrapper>
               ))}
@@ -598,6 +624,20 @@ const ListItem = styled.div`
   }
   &:hover {
     box-shadow: 0px 0px 5px 1px #f9bd3f;
+  }
+  .circle {
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    display: block;
+    background-color: #aaa;
+    margin-left: 0.7rem;
+  }
+  .green {
+    background-color: #1bcc38;
+  }
+  .yellow {
+    background-color: #f9bd3f;
   }
   .item-status span {
     background-color: ${({ theme }) => theme.colors.primary};
