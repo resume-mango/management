@@ -26,8 +26,7 @@ const ReviewChat = () => {
   const resumeId = searchParams.get('ref')
   const preview = searchParams.get('preview')
   const [showPreview, setShowPreview] = useState(preview || false)
-  const [err, setErr] = useState(false)
-
+  const [showAlert, setShowAlert] = useState(false)
   const navigate = useNavigate()
   const { setNotify } = useNotify()
   const queryClient = useQueryClient()
@@ -35,18 +34,7 @@ const ReviewChat = () => {
     data: ticketData,
     isLoading: ticketLoading,
     isError: isTicketError,
-    error: ticketError,
   } = getReviewTicketById({ ticket } as any)
-
-  const ticketErr =
-    (ticketError &&
-      (ticketError as any).response &&
-      (ticketError as any).response.data &&
-      (ticketError as any).response.data.error &&
-      (ticketError as any).response.data.error.message &&
-      (ticketError as any).response.data.error.message ===
-        'failed to find resume!') ||
-    false
 
   const ticketStatus = (ticketData && ticketData.status === 'open') || false
 
@@ -84,11 +72,6 @@ const ReviewChat = () => {
     data.pages[0].items.length
 
   const pagesLength = data?.pages.length
-
-  useEffect(() => {
-    if (!ticketErr) return
-    setErr(ticketErr)
-  }, [ticketErr])
 
   useEffect(() => {
     const messageSection = document.getElementById('message-section')
@@ -134,6 +117,11 @@ const ReviewChat = () => {
       clearTimeout(timer)
     }
   }, [isLoading, preview, ticketStatus])
+
+  useEffect(() => {
+    if (!ticketData) return
+    !ticketData.resume && setShowAlert(true)
+  }, [ticketData])
 
   const scrollToBottom = (val?: 'first-page-length' | undefined) => {
     if (
@@ -225,7 +213,7 @@ const ReviewChat = () => {
             />
           ) : (
             <Fragment>
-              <Modal show={err}>
+              <Modal show={showAlert}>
                 <TCModal>
                   <WarningIcon size="6rem" color="rgba(240, 132, 56, 1)" />
                   <h2 style={{ marginTop: '1rem' }}>Err!</h2>
@@ -234,20 +222,22 @@ const ReviewChat = () => {
                     the resume...
                   </p>
                   <div className="align-center">
-                    <Button
-                      size="lg"
-                      btnType="secondary"
-                      onClick={() => setShow(true)}
-                      style={{ marginRight: '1rem' }}
-                    >
-                      Close Ticket
-                    </Button>
+                    {ticketData && ticketData.status !== 'closed' && (
+                      <Button
+                        size="lg"
+                        btnType="secondary"
+                        onClick={() => setShow(true)}
+                        style={{ marginRight: '1rem' }}
+                      >
+                        Close Ticket
+                      </Button>
+                    )}
                     <Button
                       size="lg"
                       btnType="primary"
-                      onClick={() => navigate('/resume-review')}
+                      onClick={() => setShowAlert(false)}
                     >
-                      Go back
+                      Okay
                     </Button>
                   </div>
                 </TCModal>
