@@ -66,3 +66,11 @@ export const getReviewers = (enabled?: boolean) => {
   }
   return getQueryAdvance('reviewers', () => fetcher(), enabled)
 }
+
+export const getUnreadChats = () => {
+  const fetcher = async () => {
+    const { data } = await axios.get(`/management/chat/unread`)
+    return data
+  }
+  return getQueryAdvance('unreadChats', () => fetcher())
+}

@@ -11,6 +11,8 @@ import UserIcon from '../svgs/userIcon'
 import UsersIcon from '../svgs/usersIcon'
 import DiamondIcon from '../svgs/diamond'
 import { useAuth } from '../../contexts/authProvider'
+import BulbIcon from '../svgs/bulbIcon'
+import { getUnreadChats } from '../../queries/chatQueries'
 
 const Sidebar = () => {
   return (
@@ -40,7 +42,7 @@ const Navlinks = () => {
   const handleLogout = () => {
     window.location.href = `${process.env.AUTH_HOST}/auth/logout`
   }
-
+  const { data: unread } = getUnreadChats()
   return (
     <NavLinksWrapper>
       <div>
@@ -52,51 +54,73 @@ const Navlinks = () => {
                 <Fragment>
                   <li>
                     <NavLink to="/">
-                      <DashboardIcon size="1.1rem" /> Dashboard
+                      <div className="link-wrapper">
+                        <DashboardIcon size="1.1rem" /> Dashboard
+                      </div>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to="/users">
-                      <UsersIcon size="1.3rem" />
-                      Users
+                      <div className="link-wrapper">
+                        <UsersIcon size="1.3rem" />
+                        Users
+                      </div>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to="/plans">
-                      <BoxIcon size="1.3rem" />
-                      Plans
+                      <div className="link-wrapper">
+                        <BoxIcon size="1.3rem" />
+                        Plans
+                      </div>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to="/blogs">
-                      <BlogIcon size="1.3rem" />
-                      Blogs
+                      <div className="link-wrapper">
+                        <BlogIcon size="1.3rem" />
+                        Blogs
+                      </div>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to="/subscriptions">
-                      <DiamondIcon size="1.25rem" />
-                      Subscriptions
+                      <div className="link-wrapper">
+                        <DiamondIcon size="1.25rem" />
+                        Subscriptions
+                      </div>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to="/payments">
-                      <CreditCardIcon size="1.25rem" />
-                      Payments
+                      <div className="link-wrapper">
+                        <CreditCardIcon size="1.25rem" />
+                        Payments
+                      </div>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to="/resume-review">
-                      <CreditCardIcon size="1.25rem" />
-                      Resume Review
+                      <div className="link-wrapper">
+                        <BulbIcon size="1.4rem" />
+                        Resume Review
+                      </div>
+                      {unread && unread.count ? (
+                        <Counter>{unread.count}</Counter>
+                      ) : null}
                     </NavLink>
                   </li>
                 </Fragment>
               ) : user.role.includes('reviewer') ? (
                 <li>
                   <NavLink to="/resume-review">
-                    <CreditCardIcon size="1.25rem" />
-                    Resume Review
+                    <div className="link-wrapper">
+                      <BulbIcon size="1.4rem" />
+                      Resume Review
+                    </div>
+                    {unread && unread.count ? (
+                      <Counter>{unread.count}</Counter>
+                    ) : null}
                   </NavLink>
                 </li>
               ) : null}
@@ -109,12 +133,16 @@ const Navlinks = () => {
         <ul>
           <li>
             <a href={`${process.env.APP_HOST}/my-account`}>
-              <UserIcon size="1rem" /> My account
+              <div className="link-wrapper">
+                <UserIcon size="1rem" /> My account
+              </div>
             </a>
           </li>
           <li>
             <a onClick={() => handleLogout()}>
-              <LogoutIcon size="1.1rem" /> Logout
+              <div className="link-wrapper">
+                <LogoutIcon size="1.1rem" /> Logout
+              </div>
             </a>
           </li>
         </ul>
@@ -143,7 +171,7 @@ const NavLinksWrapper = styled.nav`
   width: 100%;
   background: #f7f8fa;
   padding: 2.5rem 0;
-
+  flex: 1;
   h6 {
     font-size: 12px;
     color: #b4b4b4;
@@ -152,8 +180,10 @@ const NavLinksWrapper = styled.nav`
   ul {
     li {
       a {
+        width: 100%;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         transition: all ease-in-out 300ms;
         padding: 0.875rem 1.5rem;
         &.active {
@@ -170,6 +200,11 @@ const NavLinksWrapper = styled.nav`
               stroke: #f08438;
             }
           }
+        }
+
+        .link-wrapper {
+          display: flex;
+          align-items: center;
         }
 
         svg {
@@ -227,4 +262,16 @@ const NavBrand = styled.div`
     font-size: 1rem;
     font-weight: bold;
   }
+`
+const Counter = styled.div`
+  display: flex;
+  width: 20px;
+  height: 20px;
+  background-color: ${({ theme }) => theme.colors.primary};
+  font-size: 0.7rem;
+  color: #fff;
+  border-radius: 50%;
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
 `

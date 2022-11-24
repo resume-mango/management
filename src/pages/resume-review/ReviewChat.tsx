@@ -17,6 +17,7 @@ import AttachmentDownload from './AttachmentDownload'
 import ReactDOMServer from 'react-dom/server'
 import { Emoji } from 'emoji-picker-react'
 import Confirmation from '../../components/ui/confirmation'
+import Modal from '../../components/ui/modal'
 
 const ReviewChat = () => {
   const [searchParams] = useSearchParams()
@@ -25,6 +26,7 @@ const ReviewChat = () => {
   const resumeId = searchParams.get('ref')
   const preview = searchParams.get('preview')
   const [showPreview, setShowPreview] = useState(preview || false)
+  const [err, setErr] = useState(false)
 
   const navigate = useNavigate()
   const { setNotify } = useNotify()
@@ -32,8 +34,20 @@ const ReviewChat = () => {
   const {
     data: ticketData,
     isLoading: ticketLoading,
-    isError: ticketError,
+    isError: isTicketError,
+    error: ticketError,
   } = getReviewTicketById({ ticket } as any)
+
+  const ticketErr =
+    (ticketError &&
+      (ticketError as any).response &&
+      (ticketError as any).response.data &&
+      (ticketError as any).response.data.error &&
+      (ticketError as any).response.data.error.message &&
+      (ticketError as any).response.data.error.message ===
+        'failed to find resume!') ||
+    false
+
   const ticketStatus = (ticketData && ticketData.status === 'open') || false
 
   const {
@@ -70,6 +84,11 @@ const ReviewChat = () => {
     data.pages[0].items.length
 
   const pagesLength = data?.pages.length
+
+  useEffect(() => {
+    if (!ticketErr) return
+    setErr(ticketErr)
+  }, [ticketErr])
 
   useEffect(() => {
     const messageSection = document.getElementById('message-section')
@@ -194,7 +213,7 @@ const ReviewChat = () => {
       <ReviewSidebar
         data={ticketData}
         isLoading={ticketLoading}
-        isError={ticketError}
+        isError={isTicketError}
         handleShowResume={handeShowResume}
       />
       <div>
@@ -206,7 +225,41 @@ const ReviewChat = () => {
             />
           ) : (
             <Fragment>
+              <Modal show={err}>
+                <TCModal>
+                  <WarningIcon size="6rem" color="rgba(240, 132, 56, 1)" />
+                  <h2 style={{ marginTop: '1rem' }}>Err!</h2>
+                  <p>
+                    Failed to find resume, looks like user might have deleted
+                    the resume...
+                  </p>
+                  <div className="align-center">
+                    <Button
+                      size="lg"
+                      btnType="secondary"
+                      onClick={() => setShow(true)}
+                      style={{ marginRight: '1rem' }}
+                    >
+                      Close Ticket
+                    </Button>
+                    <Button
+                      size="lg"
+                      btnType="primary"
+                      onClick={() => navigate('/resume-review')}
+                    >
+                      Go back
+                    </Button>
+                  </div>
+                </TCModal>
+              </Modal>
               <DashPageHeader title="Customer Support Chat">
+                <Button
+                  size="lg"
+                  btnType="secondary"
+                  onClick={() => navigate('/resume-review')}
+                >
+                  Back to Portal
+                </Button>
                 {ticketData && ticketData.status === 'open' && (
                   <Button size="lg" onClick={() => setShow(true)}>
                     Close Ticket
@@ -445,6 +498,32 @@ const ChatWrapper = styled.div<{ type: 'sender' | 'reciever' }>`
       line-height: 1;
       position: relative;
       top: 4px;
+    }
+  }
+`
+
+const TCModal = styled.div`
+  width: 450px;
+  height: fit-content;
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 3rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  p {
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    max-width: 80%;
+    margin-bottom: 2rem;
+    a {
+      font-size: inherit;
+      text-decoration: underline;
+      &:hover {
+        color: ${({ theme }) => theme.colors.primary};
+      }
     }
   }
 `

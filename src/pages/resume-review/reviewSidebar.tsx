@@ -3,8 +3,15 @@ import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
 import DownArrowIcon from '../../components/svgs/downArrow'
 import WarningIcon from '../../components/svgs/warning'
+import { useNotify } from '../../contexts/notify'
+import { handleResumeDownload } from '../../helpers/resumeHelper'
 import logoIcon from '../../public/logo/resume-mango-logo.png'
-import { SK_Heading, SK_Text, SK_Wrapper } from '../../styled/loader'
+import {
+  LoadingDots,
+  SK_Heading,
+  SK_Text,
+  SK_Wrapper,
+} from '../../styled/loader'
 
 const ReviewAccordian = ({
   data,
@@ -18,6 +25,23 @@ const ReviewAccordian = ({
     customer: true,
     resume: true,
   })
+
+  const [downloading, setDonwloading] = useState(false)
+
+  const { setNotify } = useNotify()
+
+  const downloadResume = async () => {
+    if (!data || !data.resume || !data.resume._id) return
+    setDonwloading(true)
+    await handleResumeDownload(
+      data.resume.title || 'resume' + data.resume._id,
+      data.resume._id,
+      'pdf',
+      setNotify
+    )
+    return setDonwloading(false)
+  }
+
   return (
     <AccordianWrapper>
       <div>
@@ -91,15 +115,35 @@ const ReviewAccordian = ({
             </div>
             <div className="item">
               <p className="item-label">Resume Link</p>
-              {(data && data.resume && (
-                <a
-                  data-test-id="toggle-resume"
-                  onClick={() => handleShowResume(true)}
-                >
-                  View Resume
-                </a>
-              )) ||
-                '-'}
+              {downloading ? (
+                <LoadingDots color={'rgba(240, 132, 56, 1)'}>
+                  Downloading
+                </LoadingDots>
+              ) : (
+                <Fragment>
+                  {(data && data.resume && (
+                    <Fragment>
+                      <p>
+                        <a
+                          data-test-id="toggle-resume"
+                          onClick={() => handleShowResume(true)}
+                        >
+                          View Resume
+                        </a>
+                      </p>
+                      <p>
+                        <a
+                          data-test-id="toggle-resume"
+                          onClick={() => downloadResume()}
+                        >
+                          Donwload Resume
+                        </a>
+                      </p>
+                    </Fragment>
+                  )) ||
+                    '-'}
+                </Fragment>
+              )}
             </div>
           </div>
         </Accordian>

@@ -4,6 +4,7 @@ import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import BulbIcon from '../../components/svgs/bulbIcon'
 import CreditCardIcon from '../../components/svgs/creditCard'
 import TickMarkIcon from '../../components/svgs/tickMark'
 import UsersIcon from '../../components/svgs/usersIcon'
@@ -22,6 +23,7 @@ const Dashboard = () => {
   const navigate = useNavigate()
 
   const payment = data && data.paymentData
+  const resumeReviewCount = data && data.resumeReviewCount
 
   return (
     <Fragment>
@@ -83,6 +85,55 @@ const Dashboard = () => {
                   </div>
                 </div>
               </InfoCardWrapper>
+
+              {/* Resume Review */}
+
+              <InfoCardWrapper data-test-id="info-card">
+                <div className="info-card">
+                  <div className="info-head">
+                    <div className="heading">
+                      <BulbIcon
+                        size="2.2rem"
+                        color="#343434"
+                        className="bulb-icon"
+                      />
+                      <p>Resume Review</p>
+                    </div>
+                  </div>
+                  <div className="info-body">
+                    <div className="item">
+                      <p className="label">Total</p>
+                      <p className="value">
+                        {(resumeReviewCount && `${resumeReviewCount.total}`) ||
+                          '-'}
+                      </p>
+                    </div>
+                    <div className="item">
+                      <p className="label">Last 24hrs</p>
+                      <p className="value">
+                        {(resumeReviewCount && `${resumeReviewCount.last24}`) ||
+                          '-'}
+                      </p>
+                    </div>
+                    <div className="item">
+                      <p className="label">Outstanding</p>
+                      <p className="value">
+                        {(resumeReviewCount &&
+                          `${resumeReviewCount.outstanding}`) ||
+                          '-'}
+                      </p>
+                    </div>
+                    <div className="item">
+                      <p className="label">Urgent</p>
+                      <p className="value">
+                        {(resumeReviewCount && `${resumeReviewCount.urgent}`) ||
+                          '-'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </InfoCardWrapper>
+
               <InfoCardWrapper data-test-id="info-card">
                 <div className="info-card">
                   <div className="info-head">
@@ -122,6 +173,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </InfoCardWrapper>
+
               <SubContainer
                 data-test-id="info-payments"
                 style={{
@@ -176,7 +228,7 @@ const Dashboard = () => {
             </div>
             <RHSWrapper>
               <SubContainer
-                style={{ height: '325px' }}
+                style={{ height: '400px' }}
                 data-test-id="info-signups"
               >
                 <div>
@@ -207,7 +259,7 @@ const Dashboard = () => {
                 </Footer>
               </SubContainer>
               <SubContainer
-                style={{ height: '425px' }}
+                style={{ height: '525px' }}
                 data-test-id="info-blogs"
               >
                 <div>
@@ -373,9 +425,16 @@ const InfoCardWrapper = styled.div`
         font-weight: 900;
       }
     }
+    .bulb-icon {
+      path {
+        stroke: black;
+        stroke-width: 0.5;
+      }
+    }
     .info-body {
       display: grid;
       grid-template-columns: repeat(4, 25%);
+
       .item {
         &:not(:last-child) {
           border-right: 1px solid #f0853840;
