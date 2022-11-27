@@ -263,16 +263,7 @@ describe('Delete single blog', () => {
       message: 'Failed to delete blog',
     })
   })
-  test('should fail to delete', async () => {
-    apiDeleteBlogSpy.mockResolvedValue({ data: undefined, error: 'Err' })
-    await deleteSingleBlog(id, navigate, setIsDeleting, setNotify, queryClient)
-    expect(apiDeleteBlogSpy).toBeCalledTimes(1)
-    expect(setNotify).toBeCalledWith({
-      type: 'danger',
-      heading: 'Err!',
-      message: 'Failed to delete blog',
-    })
-  })
+
   test('should  delete', async () => {
     apiDeleteBlogSpy.mockResolvedValue({
       data: { _id: 'abc' },

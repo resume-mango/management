@@ -1,8 +1,7 @@
 import { act, fireEvent, render } from '@testing-library/react'
 import { Fragment, ReactNode, useEffect } from 'react'
-import { BrowserRouter, Router, useNavigate } from 'react-router-dom'
+import { BrowserRouter, useNavigate } from 'react-router-dom'
 import useExitPrompt from '../../hooks/useExitPromt'
-import { createMemoryHistory } from 'history'
 const TestingWrapper: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <BrowserRouter>

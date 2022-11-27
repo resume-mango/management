@@ -11,6 +11,7 @@ import Cookies from 'universal-cookie'
 import { AuthProvider, useAuth } from '../../contexts/authProvider'
 import * as windowContext from '../../contexts/windowFocus'
 import * as authHelper from '../../helpers/fetchAuthData'
+// eslint-disable-next-line jest/no-mocks-import
 import TestingWrapper from '../../__mocks__/TestingWrapper'
 
 describe('Auth Provider Context', () => {

@@ -29,7 +29,7 @@ describe('User Helper', () => {
       expect(queryClient.removeQueries).not.toBeCalled()
     })
 
-    test('should fail due to no res.data param', () => {
+    test('should fail', () => {
       queryClient.getQueriesData.mockReturnValueOnce([
         [
           [['users'], [{ params: 'fake' }]],
@@ -44,7 +44,7 @@ describe('User Helper', () => {
       expect(queryClient.setQueryData).not.toBeCalled()
       expect(queryClient.removeQueries).not.toBeCalled()
     })
-    test('should fail due to no res.data param', () => {
+    test('should pass', () => {
       queryClient.getQueriesData.mockReturnValueOnce([
         [
           [['users'], [{ params: 'fake' }]],

@@ -4,6 +4,7 @@ import {
   useWindowFocus,
   WindowFocusContextProvider,
 } from '../../contexts/windowFocus'
+// eslint-disable-next-line jest/no-mocks-import
 import TestingWrapper from '../../__mocks__/TestingWrapper'
 
 describe('Window Focus Context', () => {

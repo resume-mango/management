@@ -2,6 +2,7 @@ import { act, render } from '@testing-library/react'
 import axios from 'axios'
 import * as authProvider from '../../contexts/authProvider'
 import getQueryAdvance from '../../hooks/getQueryAdvance'
+// eslint-disable-next-line jest/no-mocks-import
 import TestingWrapper from '../../__mocks__/TestingWrapper'
 
 describe('Get Query Advance Hook', () => {

@@ -6,7 +6,8 @@ import {
 } from '@testing-library/react'
 import { Fragment } from 'react'
 import { act } from 'react-dom/test-utils'
-import { NotifyProvider, useNotify } from '../../contexts/notify'
+import { useNotify } from '../../contexts/notify'
+// eslint-disable-next-line jest/no-mocks-import
 import TestingWrapper from '../../__mocks__/TestingWrapper'
 
 describe('Notify Context', () => {

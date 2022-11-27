@@ -1,6 +1,7 @@
 import { act, fireEvent, render } from '@testing-library/react'
 import { Fragment } from 'react'
 import { useViewport } from '../../contexts/viewPort'
+// eslint-disable-next-line jest/no-mocks-import
 import TestingWrapper from '../../__mocks__/TestingWrapper'
 
 describe('View Port Context', () => {
