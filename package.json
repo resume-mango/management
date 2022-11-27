@@ -9,7 +9,7 @@
     "dev": "webpack serve --config webpack/webpack.config.js --env env=dev ",
     "build": "npm run clean && webpack --config webpack/webpack.config.js --progress --env env=prod",
     "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
-    "test": "jest --coverage --runInBand --silent",
+    "test": "jest --runInBand --silent",
     "test:watch": "jest --watch --runInBand",
     "test:dev": "jest --coverage --runInBand"
   },
