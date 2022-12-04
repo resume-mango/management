@@ -509,7 +509,7 @@ const EditBlog = () => {
                 </div>
               </GridWrapper>
             </Wrapper>
-            <Modal show={showDrop} setShow={setShowDrop}>
+            <Modal show={showDrop}>
               <Dropzone setImage={setImage} setShow={setShowDrop} />
             </Modal>
           </Fragment>

@@ -98,15 +98,14 @@ const AllBlogs = () => {
   return (
     <Fragment>
       <DashPageHeader title="Blogs">
-        {data && (
-          <Button
-            btnType="primary"
-            size="lg"
-            onClick={() => navigate(`/blogs/${'new'}`)}
-          >
-            <PlusIcon color="#fff" size="0.8rem" /> &nbsp; Create Blog
-          </Button>
-        )}
+        <Button
+          btnType="primary"
+          size="lg"
+          onClick={() => navigate(`/blogs/${'new'}`)}
+          id="create-blog"
+        >
+          <PlusIcon color="#fff" size="0.8rem" /> &nbsp; Create Blog
+        </Button>
       </DashPageHeader>
       {isError ? (
         <div className="align-center" style={{ height: '30vh' }}>
