@@ -30,6 +30,6 @@ module.exports = {
       )
     }),
     new CleanWebpackPlugin(),
-    new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin({ analyzerMode: process.env.STATS || 'disabled' }),
   ],
 }

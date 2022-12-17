@@ -11,7 +11,8 @@
     "lint": "tsc --noEmit && eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
     "test": "jest --runInBand --silent",
     "test:watch": "jest --watch --runInBand",
-    "test:dev": "jest --coverage --runInBand"
+    "test:dev": "jest --coverage --runInBand",
+    "analyze": "STATS=server npm run build"
   },
   "author": "Kundan Bhosale",
   "license": "ISC",
