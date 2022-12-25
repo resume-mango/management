@@ -22,6 +22,8 @@ env:
   BUILD_DIR: build
   AWS_REGION: us-east-2
   CLOUDFRONT_DIST_ID: E3QHUO1DN2L0G1
+  PROD_ENV_FILE: ${{ secrets.PROD_ENV_BASE_64 }}
+  STAGING_ENV_FILE: ${{ secrets.STAGING_ENV_BASE_64 }}
 
 jobs:
   testing:
@@ -37,6 +39,11 @@ jobs:
 
       - name: Skip
         run: echo "Skipped testing"
+
+      - name: Add Staging ENV File
+        run: |
+          echo $STAGING_ENV_FILE | base64 --decode > .env.staging
+
       # - name: Install dependencies
       #   run: npm install --legacy-peer-deps
 
@@ -60,6 +67,10 @@ jobs:
         with:
           role-to-assume: ${{secrets.AWS_ROLE_TO_ASSUME}}
           aws-region: ${{env.AWS_REGION}}
+
+      - name: Add Production ENV File
+        run: |
+          echo $PROD_ENV_FILE | base64 --decode > .env.production
 
       - name: Install Dependencies
         run: npm ci --legacy-peer-deps
