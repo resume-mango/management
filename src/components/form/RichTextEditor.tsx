@@ -126,8 +126,24 @@ const Wrapper = styled.div<{ maxHeight: string; disabled: boolean }>`
 
   .ql-editor {
     min-height: 150px;
-    * {
+
+    h1 {
+      font-size: 2rem;
+    }
+    h2 {
+      font-size: 1.7rem;
+    }
+    h3 {
+      font-size: 1.5rem;
+    }
+    h4 {
+      font-size: 1.2rem;
+    }
+    h5 {
       font-size: 1rem;
+    }
+    h6 {
+      font-size: 0.875rem;
     }
     p,
     li,
@@ -136,8 +152,6 @@ const Wrapper = styled.div<{ maxHeight: string; disabled: boolean }>`
       font-size: inherit;
     }
     a {
-      text-decoration: none;
-
       color: ${({ theme }) => theme.colors.primary};
       &:hover {
         text-decoration: underline;
