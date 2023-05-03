@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 
 const title = Yup.string().max(100).required('Required')
 
-const short_description = Yup.string().max(300).required('Required')
+const short_description = Yup.string().max(600).required('Required')
 
 const slug = Yup.string()
   .matches(
