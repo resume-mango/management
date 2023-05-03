@@ -352,21 +352,44 @@ const EditBlog = () => {
                       disabled={isSubmitting || imageLoading}
                       name="content"
                       formats={[
+                        'header',
                         'bold',
                         'italic',
                         'underline',
+                        'align',
+                        'strike',
+                        'blockquote',
+                        'background',
                         'list',
                         'bullet',
-                        'header',
+                        'indent',
+                        'link',
+                        // 'image',
+                        'color',
+                        'code-block',
                       ]}
                       modules={{
-                        toolbar: [
-                          [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                          ['bold', 'italic', 'underline'],
-                          [{ list: 'ordered' }, { list: 'bullet' }],
-                          ['link'],
-                          ['clean'],
-                        ],
+                        toolbar: {
+                          container: [
+                            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                            ['bold', 'italic', 'underline', 'strike', 'link'],
+                            [
+                              { list: 'ordered' },
+                              { list: 'bullet' },
+                              { indent: '-1' },
+                              { indent: '+1' },
+                              { align: [] },
+                            ],
+                            [
+                              { color: [] },
+                              { background: [] },
+                              'blockquote',
+                              'code-block',
+                            ],
+                            // ['image'],
+                            ['clean'],
+                          ],
+                        },
                       }}
                     />
                   </div>

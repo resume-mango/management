@@ -30,6 +30,7 @@ const RichTextEditor = forwardRef(
       toolbar: [
         ['bold', 'italic', 'underline'],
         [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ indent: '-1' }, { indent: '+1' }],
         ['link'],
         ['clean'],
       ],
@@ -53,7 +54,11 @@ const RichTextEditor = forwardRef(
 
     return (
       <Fragment>
-        <Wrapper maxHeight={maxHeight} disabled={disabled} className="wrapper">
+        <Wrapper
+          maxHeight={maxHeight}
+          disabled={disabled}
+          id="rich-text-editor"
+        >
           <Controller
             name={name}
             control={control}
@@ -66,7 +71,7 @@ const RichTextEditor = forwardRef(
                 value={value}
                 formats={formats ? formats : initialFormats}
                 theme="snow"
-                bounds={'wrapper'}
+                bounds={'#rich-text-editor'}
                 readOnly={disabled}
                 placeholder={placeholder}
               />
@@ -124,6 +129,21 @@ const Wrapper = styled.div<{ maxHeight: string; disabled: boolean }>`
     * {
       font-size: 1rem;
     }
+    p,
+    li,
+    span,
+    a {
+      font-size: inherit;
+    }
+    a {
+      text-decoration: none;
+
+      color: ${({ theme }) => theme.colors.primary};
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     ${({ disabled, theme }) =>
       disabled &&
       ` background: ${theme.colors.grey};
@@ -142,6 +162,7 @@ const Wrapper = styled.div<{ maxHeight: string; disabled: boolean }>`
     z-index: 10;
     border: none;
     border-radius: 4px;
+    z-index: 100;
     &[data-mode='link']:before {
       content: 'Link';
     }
