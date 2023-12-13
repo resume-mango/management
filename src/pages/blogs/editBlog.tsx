@@ -1,35 +1,35 @@
-import dayjs from 'dayjs'
-import React, { Fragment, useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useQueryClient } from 'react-query'
-import { useNavigate, useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useNotify } from '../../contexts/notify'
-import useExitPrompt from '../../hooks/useExitPromt'
-import { LoadingDots, Spinner } from '../../styled/loader'
-import Confirmation from '../../components/ui/confirmation'
-import { Button } from '../../styled/button'
-import BackArrow from '../../components/svgs/backArrow'
-import { InvalidFeedBack } from '../../styled/form'
-import Input from '../../components/form/Input'
-import TextArea from '../../components/form/textarea'
-import RichTextEditor from '../../components/form/RichTextEditor'
-import DustBinIcon from '../../components/svgs/dustbin'
-import PlusIcon from '../../components/svgs/plus'
-import DropButton from '../../components/ui/DropButton'
-import Modal from '../../components/ui/modal'
-import Dropzone from '../../components/ui/dropzone'
-import { blogSchema } from '../../validations/blog'
-import { getSingleBlog } from '../../queries/blogsQueries'
+import dayjs from "dayjs"
+import React, { Fragment, useEffect, useState } from "react"
+import { FormProvider, useForm } from "react-hook-form"
+import { useQueryClient } from "react-query"
+import { useNavigate, useParams } from "react-router-dom"
+import styled from "styled-components"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useNotify } from "../../contexts/notify"
+import useExitPrompt from "../../hooks/useExitPromt"
+import { LoadingDots, Spinner } from "../../styled/loader"
+import Confirmation from "../../components/ui/confirmation"
+import { Button } from "../../styled/button"
+import BackArrow from "../../components/svgs/backArrow"
+import { InvalidFeedBack } from "../../styled/form"
+import Input from "../../components/form/Input"
+import TextArea from "../../components/form/textarea"
+import RichTextEditor from "../../components/form/RichTextEditor"
+import DustBinIcon from "../../components/svgs/dustbin"
+import PlusIcon from "../../components/svgs/plus"
+import DropButton from "../../components/ui/DropButton"
+import Modal from "../../components/ui/modal"
+import Dropzone from "../../components/ui/dropzone"
+import { blogSchema } from "../../validations/blog"
+import { getSingleBlog } from "../../queries/blogsQueries"
 
-import RouterPrompt from '../../components/ui/routerPrompt'
+import RouterPrompt from "../../components/ui/routerPrompt"
 import {
   deleteBlogImage,
   deleteSingleBlog,
   updateBlog,
   uploadBlogImage,
-} from '../../helpers/blogHelper'
+} from "../../helpers/blogHelper"
 
 interface IForm {
   title: string
@@ -55,16 +55,16 @@ const EditBlog = () => {
   const { showExitPrompt, setShowExitPrompt } = useExitPrompt(false)
 
   const defaultValues = {
-    title: '',
-    short_description: '',
-    content: '',
-    status: 'draft',
-    image: '',
-    slug: '',
+    title: "",
+    short_description: "",
+    content: "",
+    status: "draft",
+    image: "",
+    slug: "",
   }
 
   const methods = useForm<IForm>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues,
     resolver: yupResolver(blogSchema),
   })
@@ -91,7 +91,7 @@ const EditBlog = () => {
     data: initialData,
     isLoading,
     isError,
-  } = getSingleBlog(id ? id : '', true)
+  } = getSingleBlog(id ? id : "", true)
 
   const uploadImage = async (file: File, id: string) => {
     return await uploadBlogImage(
@@ -199,12 +199,12 @@ const EditBlog = () => {
     if (!initialData) return
 
     const blogData = {
-      title: initialData.title || '',
-      short_description: initialData.short_description || '',
-      content: initialData.content || '',
-      status: initialData.status || 'draft',
-      image: initialData.image || '',
-      slug: initialData.slug || '',
+      title: initialData.title || "",
+      short_description: initialData.short_description || "",
+      content: initialData.content || "",
+      status: initialData.status || "draft",
+      image: initialData.image || "",
+      slug: initialData.slug || "",
     }
     return reset(blogData, {
       keepDirty: false,
@@ -261,7 +261,7 @@ const EditBlog = () => {
     <Fragment>
       <FormProvider {...methods}>
         {isError ? (
-          <div className="align-center" style={{ height: '30vh' }}>
+          <div className="align-center" style={{ height: "30vh" }}>
             <h3>Failed to load editor!</h3>
           </div>
         ) : isLoading ? (
@@ -292,7 +292,7 @@ const EditBlog = () => {
                 onClick={() => initialData._id && deleteBlog(initialData._id)}
                 disabled={isDeleting}
               >
-                {isDeleting ? <Spinner size="1.2rem" type="white" /> : 'Delete'}
+                {isDeleting ? <Spinner size="1.2rem" type="white" /> : "Delete"}
               </Button>
             </Confirmation>
 
@@ -300,8 +300,8 @@ const EditBlog = () => {
               <Button
                 btnType="ghost"
                 size="lg"
-                style={{ width: 'fit-content', padding: '0 1rem' }}
-                onClick={() => navigate('/blogs')}
+                style={{ width: "fit-content", padding: "0 1rem" }}
+                onClick={() => navigate("/blogs")}
                 data-test-id="go-back"
               >
                 <BackArrow size="1.4rem" />
@@ -318,15 +318,15 @@ const EditBlog = () => {
                   <div className="mb-2">
                     <label>Slug</label>
                     <InputWrapper
-                      onClick={() => setFocus('slug')}
+                      onClick={() => setFocus("slug")}
                       className={
-                        isSubmitting || imageLoading ? 'disabled-input' : ''
+                        isSubmitting || imageLoading ? "disabled-input" : ""
                       }
                     >
-                      <p>www.resumemango.com/blog/</p>
+                      <p>www.careermango.co/blog/</p>
                       <Input
                         name="slug"
-                        style={{ width: '100%' }}
+                        style={{ width: "100%" }}
                         hideError
                         disabled={isSubmitting || imageLoading}
                       />
@@ -341,7 +341,7 @@ const EditBlog = () => {
                     <TextArea
                       name="short_description"
                       label="Short Description"
-                      style={{ minHeight: '110px' }}
+                      style={{ minHeight: "110px" }}
                       disabled={isSubmitting || imageLoading}
                     />
                   </div>
@@ -352,42 +352,42 @@ const EditBlog = () => {
                       disabled={isSubmitting || imageLoading}
                       name="content"
                       formats={[
-                        'header',
-                        'bold',
-                        'italic',
-                        'underline',
-                        'align',
-                        'strike',
-                        'blockquote',
-                        'background',
-                        'list',
-                        'bullet',
-                        'indent',
-                        'link',
+                        "header",
+                        "bold",
+                        "italic",
+                        "underline",
+                        "align",
+                        "strike",
+                        "blockquote",
+                        "background",
+                        "list",
+                        "bullet",
+                        "indent",
+                        "link",
                         // 'image',
-                        'color',
-                        'code-block',
+                        "color",
+                        "code-block",
                       ]}
                       modules={{
                         toolbar: {
                           container: [
                             [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                            ['bold', 'italic', 'underline', 'strike', 'link'],
+                            ["bold", "italic", "underline", "strike", "link"],
                             [
-                              { list: 'ordered' },
-                              { list: 'bullet' },
-                              { indent: '-1' },
-                              { indent: '+1' },
+                              { list: "ordered" },
+                              { list: "bullet" },
+                              { indent: "-1" },
+                              { indent: "+1" },
                               { align: [] },
                             ],
                             [
                               { color: [] },
                               { background: [] },
-                              'blockquote',
-                              'code-block',
+                              "blockquote",
+                              "code-block",
                             ],
                             // ['image'],
-                            ['clean'],
+                            ["clean"],
                           ],
                         },
                       }}
@@ -396,9 +396,9 @@ const EditBlog = () => {
                 </div>
                 <div
                   style={{
-                    borderLeft: '1px solid #eee',
-                    marginLeft: '1.5rem',
-                    paddingLeft: '1.5rem',
+                    borderLeft: "1px solid #eee",
+                    marginLeft: "1.5rem",
+                    paddingLeft: "1.5rem",
                   }}
                 >
                   <RHSWrapper>
@@ -410,7 +410,7 @@ const EditBlog = () => {
                           ? formData.image
                           : undefined
                       }
-                      className={!formData.image ? 'img-empty' : 'img-filled'}
+                      className={!formData.image ? "img-empty" : "img-filled"}
                     >
                       {imageLoading ? (
                         <Spinner type="primary" size="1.5rem" />
@@ -436,9 +436,9 @@ const EditBlog = () => {
 
                     <div
                       style={{
-                        borderTop: '1px solid #eee',
-                        paddingTop: '1rem',
-                        marginBottom: '1rem',
+                        borderTop: "1px solid #eee",
+                        paddingTop: "1rem",
+                        marginBottom: "1rem",
                       }}
                     >
                       <DropButton
@@ -447,22 +447,22 @@ const EditBlog = () => {
                         show={showStatus}
                         setShow={setShowStatus}
                         btnStyle={{
-                          textTransform: 'capitalize',
-                          fontSize: '0.875rem',
-                          background: 'rgba(244,245,247,1)',
-                          padding: '0.7rem',
-                          width: '150px',
-                          borderRadius: '4px',
+                          textTransform: "capitalize",
+                          fontSize: "0.875rem",
+                          background: "rgba(244,245,247,1)",
+                          padding: "0.7rem",
+                          width: "150px",
+                          borderRadius: "4px",
                         }}
                       >
                         <DropButton.Button>
-                          <span>Status&nbsp;:&nbsp;</span>{' '}
+                          <span>Status&nbsp;:&nbsp;</span>{" "}
                           <span
                             style={{
                               color: `${
-                                formData.status === 'published'
-                                  ? 'rgba(32, 192, 50, 1)'
-                                  : '#343434'
+                                formData.status === "published"
+                                  ? "rgba(32, 192, 50, 1)"
+                                  : "#343434"
                               }`,
                             }}
                           >
@@ -470,14 +470,14 @@ const EditBlog = () => {
                           </span>
                         </DropButton.Button>
                         <DropButton.Item>
-                          <a onClick={() => handleStatus('status', 'draft')}>
+                          <a onClick={() => handleStatus("status", "draft")}>
                             Draft
                           </a>
                         </DropButton.Item>
 
                         <DropButton.Item>
                           <a
-                            onClick={() => handleStatus('status', 'published')}
+                            onClick={() => handleStatus("status", "published")}
                           >
                             Published
                           </a>
@@ -486,18 +486,18 @@ const EditBlog = () => {
                     </div>
                     <DetailsWrapper>
                       <p>Created By</p>
-                      <p>{initialData.created_by.name || '-'}</p>
+                      <p>{initialData.created_by.name || "-"}</p>
                       <p>Last Modified</p>
                       <p>
                         {dayjs(initialData.updatedAt).format(
-                          'DD MMM, YYYY hh:mm a'
-                        ) || '-'}
+                          "DD MMM, YYYY hh:mm a"
+                        ) || "-"}
                       </p>
                       <p>Created Date</p>
                       <p>
                         {dayjs(initialData.createdAt).format(
-                          'DD MMM, YYYY hh:mm a'
-                        ) || '-'}
+                          "DD MMM, YYYY hh:mm a"
+                        ) || "-"}
                       </p>
                     </DetailsWrapper>
                     <FlexWrapper>
@@ -516,7 +516,7 @@ const EditBlog = () => {
                         {isSubmitting ? (
                           <Spinner size="1.2rem" type="white" />
                         ) : (
-                          'Save Changes'
+                          "Save Changes"
                         )}
                       </Button>
                       <Button
@@ -564,7 +564,7 @@ const FlexWrapper = styled.div`
 
 const ImageWrapper = styled.div<{ image: string | undefined }>`
   background: ${({ image }) =>
-    image ? `url("${image}")` : 'rgba(244, 245, 247, 1)'};
+    image ? `url("${image}")` : "rgba(244, 245, 247, 1)"};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -578,7 +578,7 @@ const ImageWrapper = styled.div<{ image: string | undefined }>`
   overflow: hidden;
   &::before {
     display: block;
-    content: '';
+    content: "";
     position: absolute;
     background-color: #000000;
     width: 100%;

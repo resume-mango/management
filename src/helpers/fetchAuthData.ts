@@ -1,6 +1,6 @@
-import axios from 'axios'
-import { NavigateFunction } from 'react-router-dom'
-import Cookies from 'universal-cookie'
+import axios from "axios"
+import { NavigateFunction } from "react-router-dom"
+import Cookies from "universal-cookie"
 
 /**
  * Fetches user auth data
@@ -20,32 +20,32 @@ export const fetchAuthData = async (
 ) => {
   const cookies = new Cookies()
   return await axios
-    .get(`${process.env.AUTH_HOST}/auth/data`)
+    .get(`${process.env.AUTH_HOST}/data`)
     .then((res: any) => {
-      if (!res || !res.data) throw new Error('Failed')
+      if (!res || !res.data) throw new Error("Failed")
 
-      if (!['admin', 'reviewer'].some((r) => res.data.user.role.includes(r))) {
-        navigate('/access-denied', { replace: true })
+      if (!["admin", "reviewer"].some((r) => res.data.user.role.includes(r))) {
+        navigate("/access-denied", { replace: true })
         return false
       }
       if (res.data.token) {
-        axios.defaults.headers.common['Authorization'] = res.data.token
+        axios.defaults.headers.common["Authorization"] = res.data.token
       }
       setUser(res.data.user)
       setToken(res.data.token)
       return true
     })
     .catch((err) => {
-      console.log(err.message === 'Failed')
+      console.log(err.message === "Failed")
       if (
         (err.response && err.response.status && err.response.status === 401) ||
-        err.message === 'Failed'
+        err.message === "Failed"
       ) {
-        cookies.remove('rm_ia', {
-          path: '/',
+        cookies.remove("rm_ia", {
+          path: "/",
           domain: process.env.COOKIE_DOMAIN,
         })
-        console.log('hit', location)
+        console.log("hit", location)
         window.location.href = location
       }
       return false

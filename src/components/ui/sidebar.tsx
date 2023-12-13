@@ -1,18 +1,18 @@
-import React, { Fragment } from 'react'
-import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
-import logoIcon from '../../public/logo/resume-mango-logo.png'
-import BlogIcon from '../svgs/blogs'
-import BoxIcon from '../svgs/boxIcon'
-import DashboardIcon from '../svgs/Dashboard'
-import LogoutIcon from '../svgs/logoutIcon'
-import CreditCardIcon from '../svgs/creditCard'
-import UserIcon from '../svgs/userIcon'
-import UsersIcon from '../svgs/usersIcon'
-import DiamondIcon from '../svgs/diamond'
-import { useAuth } from '../../contexts/authProvider'
-import BulbIcon from '../svgs/bulbIcon'
-import { getUnreadChats } from '../../queries/chatQueries'
+import React, { Fragment } from "react"
+import { NavLink } from "react-router-dom"
+import styled from "styled-components"
+import logoIcon from "../../public/logo/resume-mango-logo.png"
+import BlogIcon from "../svgs/blogs"
+import BoxIcon from "../svgs/boxIcon"
+import DashboardIcon from "../svgs/Dashboard"
+import LogoutIcon from "../svgs/logoutIcon"
+import CreditCardIcon from "../svgs/creditCard"
+import UserIcon from "../svgs/userIcon"
+import UsersIcon from "../svgs/usersIcon"
+import DiamondIcon from "../svgs/diamond"
+import { useAuth } from "../../contexts/authProvider"
+import BulbIcon from "../svgs/bulbIcon"
+import { getUnreadChats } from "../../queries/chatQueries"
 
 const Sidebar = () => {
   return (
@@ -24,7 +24,7 @@ const Sidebar = () => {
               <img
                 src={logoIcon}
                 width="75px"
-                style={{ marginRight: '0.3rem' }}
+                style={{ marginRight: "0.3rem" }}
               />
               {/* <img src={logoText} width="150px" /> */}
             </a>
@@ -40,7 +40,7 @@ const Sidebar = () => {
 const Navlinks = () => {
   const { user } = useAuth()
   const handleLogout = () => {
-    window.location.href = `${process.env.AUTH_HOST}/auth/logout`
+    window.location.href = `${process.env.AUTH_HOST}/logout`
   }
   const { data: unread } = getUnreadChats()
   return (
@@ -50,7 +50,7 @@ const Navlinks = () => {
         <ul>
           {user.role && user.role.length > 0 ? (
             <Fragment>
-              {user.role.includes('admin') ? (
+              {user.role.includes("admin") ? (
                 <Fragment>
                   <li>
                     <NavLink to="/">
@@ -111,7 +111,7 @@ const Navlinks = () => {
                     </NavLink>
                   </li>
                 </Fragment>
-              ) : user.role.includes('reviewer') ? (
+              ) : user.role.includes("reviewer") ? (
                 <li>
                   <NavLink to="/resume-review">
                     <div className="link-wrapper">
@@ -128,7 +128,7 @@ const Navlinks = () => {
           ) : null}
         </ul>
       </div>
-      <div style={{ marginTop: '1.5rem' }}>
+      <div style={{ marginTop: "1.5rem" }}>
         <h6>YOUR ACCOUNT</h6>
         <ul>
           <li>
