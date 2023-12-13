@@ -45,7 +45,6 @@ export const fetchAuthData = async (
           path: "/",
           domain: process.env.COOKIE_DOMAIN,
         })
-        console.log("hit", location)
         window.location.href = location
       }
       return false

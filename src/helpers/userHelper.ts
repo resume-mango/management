@@ -1,5 +1,5 @@
-import { QueryClient } from 'react-query'
-import { NavigateFunction } from 'react-router-dom'
+import { QueryClient } from "react-query"
+import { NavigateFunction } from "react-router-dom"
 /**
  *
  * @param user_id auth0 provider id for user
@@ -16,7 +16,7 @@ export const handleDeleteSuccess = (
 ) => {
   if (!res.data || !res.data.id) return
   const id = res.data.id
-  const data = queryClient.getQueriesData(['users']) as any
+  const data = queryClient.getQueriesData(["users"]) as any
   if (data && data.length > 0) {
     const found = data.reduce(
       (acc: any, curr: any) => {
@@ -33,11 +33,10 @@ export const handleDeleteSuccess = (
       },
       { key: null, data: null }
     )
-    console.log(found)
     if (found.key && found.data) {
-      queryClient.setQueryData(['users', found.key], found.data)
-      queryClient.removeQueries(['user', user_id])
+      queryClient.setQueryData(["users", found.key], found.data)
+      queryClient.removeQueries(["user", user_id])
     }
   }
-  navigate('/users', { replace: true })
+  navigate("/users", { replace: true })
 }
