@@ -1,7 +1,7 @@
 import React, { Fragment } from "react"
 import { NavLink } from "react-router-dom"
 import styled from "styled-components"
-import logoIcon from "../../public/logo/resume-mango-logo.png"
+import logoIcon from "../../public/logo/logo-white.svg"
 import BlogIcon from "../svgs/blogs"
 import BoxIcon from "../svgs/boxIcon"
 import DashboardIcon from "../svgs/Dashboard"
@@ -23,8 +23,8 @@ const Sidebar = () => {
             <a href={`${process.env.BASE_HOST}`}>
               <img
                 src={logoIcon}
-                width="75px"
-                style={{ marginRight: "0.3rem" }}
+                width="175"
+                style={{ marginRight: "0.3rem", marginBottom: "0.3rem" }}
               />
               {/* <img src={logoText} width="150px" /> */}
             </a>

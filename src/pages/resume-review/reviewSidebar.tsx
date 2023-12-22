@@ -1,17 +1,17 @@
-import dayjs from 'dayjs'
-import React, { Fragment, useState } from 'react'
-import styled from 'styled-components'
-import DownArrowIcon from '../../components/svgs/downArrow'
-import WarningIcon from '../../components/svgs/warning'
-import { useNotify } from '../../contexts/notify'
-import { handleResumeDownload } from '../../helpers/resumeHelper'
-import logoIcon from '../../public/logo/resume-mango-logo.png'
+import dayjs from "dayjs"
+import React, { Fragment, useState } from "react"
+import styled from "styled-components"
+import DownArrowIcon from "../../components/svgs/downArrow"
+import WarningIcon from "../../components/svgs/warning"
+import { useNotify } from "../../contexts/notify"
+import { handleResumeDownload } from "../../helpers/resumeHelper"
+import logoIcon from "../../public/logo/logo-icon.svg"
 import {
   LoadingDots,
   SK_Heading,
   SK_Text,
   SK_Wrapper,
-} from '../../styled/loader'
+} from "../../styled/loader"
 
 const ReviewAccordian = ({
   data,
@@ -34,9 +34,9 @@ const ReviewAccordian = ({
     if (!data || !data.resume || !data.resume._id) return
     setDonwloading(true)
     await handleResumeDownload(
-      data.resume.title || 'resume' + data.resume._id,
+      data.resume.title || "resume" + data.resume._id,
       data.resume._id,
-      'pdf',
+      "pdf",
       setNotify
     )
     return setDonwloading(false)
@@ -58,11 +58,11 @@ const ReviewAccordian = ({
           <div className="item-wrapper">
             <div className="item">
               <p className="item-label">Ticket ID</p>
-              <p>{data._id || '-'}</p>
+              <p>{data._id || "-"}</p>
             </div>
             <div className="item">
               <p className="item-label">Status</p>
-              <p className="capitalize">{data.status || '-'}</p>
+              <p className="capitalize">{data.status || "-"}</p>
             </div>
           </div>
         </Accordian>
@@ -82,8 +82,8 @@ const ReviewAccordian = ({
               <p>
                 {(data.user &&
                   data.user.firstName &&
-                  (data.user.firstName + ' ' + data.user.lastName || '')) ||
-                  '-'}
+                  (data.user.firstName + " " + data.user.lastName || "")) ||
+                  "-"}
               </p>
             </div>
           </div>
@@ -103,20 +103,20 @@ const ReviewAccordian = ({
           <div className="item-wrapper">
             <div className="item">
               <p className="item-label">Name</p>
-              <p>{(data.resume && data.resume.title) || '-'}</p>
+              <p>{(data.resume && data.resume.title) || "-"}</p>
             </div>
             <div className="item">
               <p className="item-label">Date Created</p>
               <p>
                 {(data.createdAt &&
-                  dayjs(data.createdAt).format('DD/MM/YYYY')) ||
-                  '-'}
+                  dayjs(data.createdAt).format("DD/MM/YYYY")) ||
+                  "-"}
               </p>
             </div>
             <div className="item">
               <p className="item-label">Resume Link</p>
               {downloading ? (
-                <LoadingDots color={'rgba(240, 132, 56, 1)'}>
+                <LoadingDots color={"rgba(240, 132, 56, 1)"}>
                   Downloading
                 </LoadingDots>
               ) : (
@@ -141,7 +141,7 @@ const ReviewAccordian = ({
                       </p>
                     </Fragment>
                   )) ||
-                    '-'}
+                    "-"}
                 </Fragment>
               )}
             </div>
@@ -172,7 +172,7 @@ const ReviewSidebar = ({
               <img
                 src={logoIcon}
                 width="75px"
-                style={{ marginRight: '0.3rem' }}
+                style={{ marginRight: "0.3rem" }}
               />
             </a>
             <p>Management Console</p>
@@ -182,21 +182,21 @@ const ReviewSidebar = ({
           {isError ? (
             <div className="align-center">
               <WarningIcon size="2rem" />
-              <p style={{ marginLeft: '0.5rem' }}>
+              <p style={{ marginLeft: "0.5rem" }}>
                 Failed to load ticket details!
               </p>
             </div>
           ) : isLoading ? (
-            <div style={{ padding: '2.5rem', height: '100%' }}>
+            <div style={{ padding: "2.5rem", height: "100%" }}>
               <AccordianWrapper>
                 <SK_Wrapper>
                   <SK_Heading className="mb-1" />
                   <SK_Text className="mb" />
                   <SK_Text className="mb" />
                   <SK_Text className="mb" />
-                  <SK_Text style={{ marginBottom: '1rem' }} />
+                  <SK_Text style={{ marginBottom: "1rem" }} />
                   <SK_Heading className="mb-1" />
-                  <SK_Text style={{ marginBottom: '5rem' }} />
+                  <SK_Text style={{ marginBottom: "5rem" }} />
                 </SK_Wrapper>
                 <SK_Wrapper>
                   <SK_Heading className="mb-1" />
@@ -241,7 +241,7 @@ const Accordian = styled.div<{ show: boolean }>`
     svg {
       transition: all ease-in-out 0.5s;
       transform: ${({ show }) =>
-        show ? 'rotateZ(360deg)' : 'rotateZ(180deg)'};
+        show ? "rotateZ(360deg)" : "rotateZ(180deg)"};
       path {
         stroke: ${({ theme }) => theme.colors.primary};
         stroke-width: 2;
@@ -256,9 +256,9 @@ const Accordian = styled.div<{ show: boolean }>`
   .item-wrapper {
     transition: all ease-in-out 0.5s;
     height: 100%;
-    max-height: ${({ show }) => (show ? '1000px' : '0px')};
+    max-height: ${({ show }) => (show ? "1000px" : "0px")};
     opacity: ${({ show }) => (show ? 1 : 0)};
-    visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
+    visibility: ${({ show }) => (show ? "visible" : "hidden")};
 
     overflow: hidden;
     p {
