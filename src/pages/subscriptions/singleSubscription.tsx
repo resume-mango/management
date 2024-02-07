@@ -1,20 +1,20 @@
-import dayjs from 'dayjs'
-import React, { Fragment } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import BackArrow from '../../components/svgs/backArrow'
-import LinkIcon from '../../components/svgs/link'
-import { convertISOToUnixDate } from '../../helpers/date'
-import { getSingleSubscription } from '../../queries/subscriptionQueries'
-import { Badge } from '../../styled/badge'
-import { Button } from '../../styled/button'
-import { LoadingDots, LoadingWrapper, Spinner } from '../../styled/loader'
+import dayjs from "dayjs"
+import React, { Fragment } from "react"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import styled from "styled-components"
+import BackArrow from "../../components/svgs/backArrow"
+import LinkIcon from "../../components/svgs/link"
+import { convertISOToUnixDate } from "../../helpers/date"
+import { getSingleSubscription } from "../../queries/subscriptionQueries"
+import { Badge } from "../../styled/badge"
+import { Button } from "../../styled/button"
+import { LoadingDots, LoadingWrapper, Spinner } from "../../styled/loader"
 
 const SingleSubscription = () => {
   const { sub_id } = useParams()
   const navigate = useNavigate()
   const { data, isLoading, isError } = getSingleSubscription(
-    sub_id ? sub_id : '',
+    sub_id ? sub_id : "",
     !!sub_id
   )
 
@@ -29,7 +29,7 @@ const SingleSubscription = () => {
   return (
     <Fragment>
       {isError ? (
-        <div className="align-center" style={{ height: '30vh' }}>
+        <div className="align-center" style={{ height: "30vh" }}>
           <h3>Failed to load subscription!</h3>
         </div>
       ) : isLoading ? (
@@ -43,11 +43,11 @@ const SingleSubscription = () => {
             btnType="ghost"
             size="lg"
             style={{
-              width: 'fit-content',
-              padding: '0 1rem',
-              marginBottom: '1rem',
+              width: "fit-content",
+              padding: "0 1rem",
+              marginBottom: "1rem",
             }}
-            onClick={() => navigate('/subscriptions')}
+            onClick={() => navigate("/subscriptions")}
           >
             <BackArrow size="1.4rem" />
           </Button>
@@ -58,17 +58,17 @@ const SingleSubscription = () => {
                   <div>
                     <p style={{ margin: 0 }}>SUBSCRIPTION</p>
 
-                    <h2>{data.name || 'Unknown'} Plan</h2>
+                    <h2>{data.name || "Unknown"} Plan</h2>
                   </div>
                   <Badge
                     type={
-                      data.status === 'active'
-                        ? 'success'
-                        : data.status === 'pending'
-                        ? 'primary'
-                        : 'ghost'
+                      data.status === "active"
+                        ? "success"
+                        : data.status === "pending"
+                        ? "primary"
+                        : "ghost"
                     }
-                    size={'md'}
+                    size={"md"}
                   >
                     {data.status}
                   </Badge>
@@ -99,8 +99,8 @@ const SingleSubscription = () => {
 
                   <p>
                     {data.create_time
-                      ? dayjs(data.create_time).format('DD MMM YYYY')
-                      : '-'}
+                      ? dayjs(data.create_time).format("DD MMM YYYY")
+                      : "-"}
                   </p>
                 </div>
                 <div className="info-item">
@@ -108,7 +108,7 @@ const SingleSubscription = () => {
                     <Fragment>
                       <p className="info-item-label">Ended Time</p>
 
-                      <p>{dayjs(data.ended_time).format('DD MMM YYYY')}</p>
+                      <p>{dayjs(data.ended_time).format("DD MMM YYYY")}</p>
                     </Fragment>
                   ) : (
                     <Fragment>
@@ -118,9 +118,9 @@ const SingleSubscription = () => {
                           <p>
                             {data.current_period_end
                               ? dayjs(data.current_period_end).format(
-                                  'DD MMM YYYY'
+                                  "DD MMM YYYY"
                                 )
-                              : '-'}
+                              : "-"}
                           </p>
                         </div>
                       )}
@@ -130,8 +130,8 @@ const SingleSubscription = () => {
                           <p className="info-item-label">Expires On</p>
                           <p>
                             {data.cancel_at
-                              ? dayjs(data.cancel_at).format('DD MMM YYYY')
-                              : '-'}
+                              ? dayjs(data.cancel_at).format("DD MMM YYYY")
+                              : "-"}
                           </p>
                         </div>
                       )}
@@ -141,15 +141,15 @@ const SingleSubscription = () => {
                 <div className="info-item">
                   <p className="info-item-label">Customer</p>
                   <p>
-                    {data.user && data.user.email && data.user.provider_id ? (
+                    {data.user && data.user?.provider_id ? (
                       <Link
-                        to={`/users/${data.user.provider_id}/details`}
+                        to={`/users/${data.user?.provider_id}/details`}
                         className="ref-link"
                       >
-                        {data.user.email} <LinkIcon />
+                        {data.user.email || data.user.provider_id} <LinkIcon />
                       </Link>
                     ) : (
-                      '-'
+                      "-"
                     )}
                   </p>
                 </div>
@@ -164,21 +164,21 @@ const SingleSubscription = () => {
 
                   <p>Stripe Price ID</p>
                   <p className="sub-value">
-                    {(data.reference && data.reference.price_id) || '-'}
+                    {(data.reference && data.reference.price_id) || "-"}
                   </p>
                   <p>Stripe Subscription ID</p>
                   <p className="sub-value">
-                    {(data.reference && data.reference.subscription_id) || '-'}
+                    {(data.reference && data.reference.subscription_id) || "-"}
                   </p>
                 </div>
                 <div className="sub-item">
                   <p>User ID</p>
                   <p className="sub-value">
-                    {(data.user && data.user._id) || '-'}
+                    {(data.user && data.user._id) || "-"}
                   </p>
                   <p>Stripe Customer ID</p>
                   <p className="sub-value">
-                    {(data.reference && data.reference.customer_id) || '-'}
+                    {(data.reference && data.reference.customer_id) || "-"}
                   </p>
                 </div>
               </SubDetails>
@@ -191,18 +191,18 @@ const SingleSubscription = () => {
                   <p className="sub-value">{data.name} Plan</p>
                   <p>Amount</p>
                   <p className="sub-value">
-                    ${data.amount ? data.amount : '0.00'}&nbsp;
+                    ${data.amount ? data.amount : "0.00"}&nbsp;
                     {data.currency && data.currency.toUpperCase()}
                   </p>
                   <p>Current Period</p>
                   <p className="sub-value">
                     {data.current_period_start
-                      ? dayjs(data.current_period_start).format('DD MMM YYYY')
-                      : '-'}
+                      ? dayjs(data.current_period_start).format("DD MMM YYYY")
+                      : "-"}
                     &nbsp;&nbsp;to&nbsp;&nbsp;
                     {data.current_period_end
-                      ? dayjs(data.current_period_end).format('DD MMM YYYY')
-                      : '-'}
+                      ? dayjs(data.current_period_end).format("DD MMM YYYY")
+                      : "-"}
                   </p>
                 </div>
 
@@ -224,20 +224,20 @@ const SingleSubscription = () => {
                         </Fragment>
                       </PaymentCardWrapper>
                     ) : (
-                      'card'
+                      "card"
                     )}
                   </p>
                   <p>Created</p>
                   <p className="sub-value">
                     {data.create_time
-                      ? dayjs(data.create_time).format('DD MMM YYYY, hh:mm a')
-                      : '-'}
+                      ? dayjs(data.create_time).format("DD MMM YYYY, hh:mm a")
+                      : "-"}
                   </p>
                   <p>Ended</p>
                   <p className="sub-value">
                     {data.ended_time
-                      ? dayjs(data.ended_time).format('DD MMM YYYY, hh:mm a')
-                      : '-'}
+                      ? dayjs(data.ended_time).format("DD MMM YYYY, hh:mm a")
+                      : "-"}
                   </p>
                 </div>
               </SubDetails>
@@ -250,8 +250,8 @@ const SingleSubscription = () => {
                         This is a preview of the invoice that will be billed
                         on&nbsp;
                         {data.current_period_end
-                          ? dayjs(data.current_period_end).format('DD MMM YYYY')
-                          : 'end of the period'}
+                          ? dayjs(data.current_period_end).format("DD MMM YYYY")
+                          : "end of the period"}
                         . It may change if the subscription is updated.
                       </p>
                     </div>
@@ -259,8 +259,8 @@ const SingleSubscription = () => {
                   <InvoiceTable>
                     <thead>
                       <tr>
-                        <th style={{ width: 'auto' }}>Description</th>
-                        <th style={{ width: '120px' }}>Amount</th>
+                        <th style={{ width: "auto" }}>Description</th>
+                        <th style={{ width: "120px" }}>Amount</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -270,7 +270,7 @@ const SingleSubscription = () => {
                             <td>{item.description}</td>
                             <td
                               className={`amount ${
-                                item.amount < 0 && 'negative'
+                                item.amount < 0 && "negative"
                               }`}
                             >
                               <span className="currency-symbol">$</span>
@@ -286,21 +286,21 @@ const SingleSubscription = () => {
                       <p className="semibold">Subtotal</p>
                       <p
                         className={`semibold amount ${
-                          data.upcoming_invoice.total < 0 && 'negative'
+                          data.upcoming_invoice.total < 0 && "negative"
                         }`}
                       >
                         <span className="currency-symbol">$</span>
-                        {data.upcoming_invoice.total || '0.00'}
+                        {data.upcoming_invoice.total || "0.00"}
                       </p>
 
                       <p className="semibold">Total </p>
                       <p
                         className={`semibold amount ${
-                          data.upcoming_invoice.total < 0 && 'negative'
+                          data.upcoming_invoice.total < 0 && "negative"
                         }`}
                       >
                         <span className="currency-symbol">$</span>
-                        {data.upcoming_invoice.total || '0.00'}
+                        {data.upcoming_invoice.total || "0.00"}
                       </p>
                       {data.upcoming_invoice.amount_paid > 0 && (
                         <Fragment>
@@ -309,22 +309,22 @@ const SingleSubscription = () => {
                           <p
                             className={`semibold amount ${
                               data.upcoming_invoice.amount_paid < 0 &&
-                              'negative'
+                              "negative"
                             }`}
                           >
                             <span className="currency-symbol">$</span>
-                            {data.upcoming_invoice.amount_paid || '0.00'}
+                            {data.upcoming_invoice.amount_paid || "0.00"}
                           </p>
                         </Fragment>
                       )}
                       <p className="semibold">Amount Due</p>
                       <p
                         className={`semibold amount ${
-                          data.upcoming_invoice.amount_due < 0 && 'negative'
+                          data.upcoming_invoice.amount_due < 0 && "negative"
                         }`}
                       >
                         <span className="currency-symbol">$</span>
-                        {data.upcoming_invoice.amount_due || '0.00'}
+                        {data.upcoming_invoice.amount_due || "0.00"}
                       </p>
                     </div>
                   </InvoiceFooter>
@@ -340,36 +340,36 @@ const SingleSubscription = () => {
                   <InvoiceTable>
                     <thead>
                       <tr>
-                        <th style={{ width: 'auto' }}>ID</th>
-                        <th style={{ width: '15%' }}>Status</th>
-                        <th style={{ width: '15%' }}>Amount</th>
-                        <th style={{ width: '15%' }}>Created</th>
-                        <th style={{ width: '15%' }}></th>
+                        <th style={{ width: "auto" }}>ID</th>
+                        <th style={{ width: "15%" }}>Status</th>
+                        <th style={{ width: "15%" }}>Amount</th>
+                        <th style={{ width: "15%" }}>Created</th>
+                        <th style={{ width: "15%" }}></th>
                       </tr>
                     </thead>
 
                     <tbody>
                       <tr>
-                        <td>{data.latest_invoice.id || '-'}</td>
+                        <td>{data.latest_invoice.id || "-"}</td>
                         <td>
                           <Badge
                             type={
-                              data.latest_invoice.status === 'paid'
-                                ? 'success'
-                                : 'ghost'
+                              data.latest_invoice.status === "paid"
+                                ? "success"
+                                : "ghost"
                             }
                             size="sm"
                           >
-                            {data.latest_invoice.status || 'unknown'}
+                            {data.latest_invoice.status || "unknown"}
                           </Badge>
                         </td>
-                        <td>${data.latest_invoice.total || '0.00'}</td>
+                        <td>${data.latest_invoice.total || "0.00"}</td>
                         <td>
                           {(data.latest_invoice.created &&
                             dayjs(data.latest_invoice.created).format(
-                              'DD MMM YYYY'
+                              "DD MMM YYYY"
                             )) ||
-                            '-'}
+                            "-"}
                         </td>
                         <td>
                           {data.latest_invoice.hosted_invoice_url && (
@@ -476,7 +476,7 @@ const InvoiceTable = styled.table`
     letter-spacing: 1.5px;
   }
   .negative:before {
-    content: '-';
+    content: "-";
   }
   ${Badge} {
     min-width: 75px;

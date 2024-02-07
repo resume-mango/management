@@ -1,25 +1,25 @@
-import dayjs from 'dayjs'
-import React, { Fragment } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import BackArrow from '../../components/svgs/backArrow'
-import LinkIcon from '../../components/svgs/link'
-import { getPaymentsById } from '../../queries/paymentQueries'
-import { Badge } from '../../styled/badge'
-import { Button } from '../../styled/button'
-import { LoadingDots, LoadingWrapper, Spinner } from '../../styled/loader'
+import dayjs from "dayjs"
+import React, { Fragment } from "react"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import styled from "styled-components"
+import BackArrow from "../../components/svgs/backArrow"
+import LinkIcon from "../../components/svgs/link"
+import { getPaymentsById } from "../../queries/paymentQueries"
+import { Badge } from "../../styled/badge"
+import { Button } from "../../styled/button"
+import { LoadingDots, LoadingWrapper, Spinner } from "../../styled/loader"
 
 const SinglePayment = () => {
   const { payment_id } = useParams()
   const navigate = useNavigate()
   const { data, isLoading, isError } = getPaymentsById(
-    payment_id ? payment_id : '',
+    payment_id ? payment_id : "",
     !!payment_id
   )
   return (
     <Fragment>
       {isError ? (
-        <div className="align-center" style={{ height: '30vh' }}>
+        <div className="align-center" style={{ height: "30vh" }}>
           <h3>Failed to load subscription!</h3>
         </div>
       ) : isLoading ? (
@@ -33,11 +33,11 @@ const SinglePayment = () => {
             btnType="ghost"
             size="lg"
             style={{
-              width: 'fit-content',
-              padding: '0 1rem',
-              marginBottom: '1rem',
+              width: "fit-content",
+              padding: "0 1rem",
+              marginBottom: "1rem",
             }}
-            onClick={() => navigate('/payments')}
+            onClick={() => navigate("/payments")}
             data-test-id="go-back"
           >
             <BackArrow size="1.4rem" />
@@ -56,13 +56,13 @@ const SinglePayment = () => {
                 </div>
                 <Badge
                   type={
-                    data.status === 'succeeded'
-                      ? 'success'
-                      : data.status === 'pending'
-                      ? 'primary'
-                      : 'ghost'
+                    data.status === "succeeded"
+                      ? "success"
+                      : data.status === "pending"
+                      ? "primary"
+                      : "ghost"
                   }
-                  size={'md'}
+                  size={"md"}
                 >
                   {data.status}
                 </Badge>
@@ -74,22 +74,22 @@ const SinglePayment = () => {
                 <p className="info-item-label">Created</p>
 
                 <p>
-                  {data.date ? dayjs(data.date).format('DD MMM YYYY') : '-'}
+                  {data.date ? dayjs(data.date).format("DD MMM YYYY") : "-"}
                 </p>
               </div>
 
               <div className="info-item">
                 <p className="info-item-label">Customer</p>
                 <p>
-                  {data.email && data.provider_id ? (
+                  {data.provider_id ? (
                     <Link
                       to={`/users/${data.provider_id}/details`}
                       className="ref-link"
                     >
-                      {data.email} <LinkIcon />
+                      {data.email || data.provider_id} <LinkIcon />
                     </Link>
                   ) : (
-                    '-'
+                    "-"
                   )}
                 </p>
               </div>
@@ -104,7 +104,7 @@ const SinglePayment = () => {
                       {data.subscription_name} plan <LinkIcon />
                     </Link>
                   ) : (
-                    '-'
+                    "-"
                   )}
                 </p>
               </div>
@@ -113,25 +113,25 @@ const SinglePayment = () => {
             <SubDetails>
               <div className="sub-item">
                 <p>Invoice ID</p>
-                <p className="sub-value">{data.references.invoice_id || '-'}</p>
+                <p className="sub-value">{data.references.invoice_id || "-"}</p>
 
                 <p>Payment Intent ID</p>
                 <p className="sub-value">
-                  {data.references.payment_intent_id || '-'}
+                  {data.references.payment_intent_id || "-"}
                 </p>
                 <p>Charge ID </p>
-                <p className="sub-value">{data.references.charge_id || '-'}</p>
+                <p className="sub-value">{data.references.charge_id || "-"}</p>
               </div>
               <div className="sub-item">
                 <p>User ID</p>
-                <p className="sub-value">{data.user_id || '-'}</p>
+                <p className="sub-value">{data.user_id || "-"}</p>
                 <p>Customer ID</p>
                 <p className="sub-value">
-                  {data.references.customer_id || '-'}
+                  {data.references.customer_id || "-"}
                 </p>
                 <p>Subscription ID</p>
                 <p className="sub-value">
-                  {data.references.subscription_id || '-'}
+                  {data.references.subscription_id || "-"}
                 </p>
               </div>
             </SubDetails>
@@ -156,7 +156,7 @@ const SinglePayment = () => {
                 <p>Net</p>
                 <b
                   className={`sub-value ${
-                    data.payment_details.net_amount < 0 && 'negative-sign'
+                    data.payment_details.net_amount < 0 && "negative-sign"
                   }`}
                 >
                   {data.payment_details.net_amount > 0
@@ -172,8 +172,8 @@ const SinglePayment = () => {
                 <p>Date</p>
                 <p className="sub-value">
                   {data.date
-                    ? dayjs(data.date).format('DD MMM YYYY, hh:mm a')
-                    : '-'}
+                    ? dayjs(data.date).format("DD MMM YYYY, hh:mm a")
+                    : "-"}
                 </p>
                 <p> Address</p>
                 <p className="sub-value">
@@ -253,7 +253,7 @@ const SubDetails = styled.div`
     .negative-sign {
       position: relative;
       &::before {
-        content: '- ';
+        content: "- ";
         position: absolute;
         left: -10px;
       }

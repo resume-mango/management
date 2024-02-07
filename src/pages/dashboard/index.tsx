@@ -1,17 +1,19 @@
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import React, { Fragment } from 'react'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-import BulbIcon from '../../components/svgs/bulbIcon'
-import CreditCardIcon from '../../components/svgs/creditCard'
-import TickMarkIcon from '../../components/svgs/tickMark'
-import UsersIcon from '../../components/svgs/usersIcon'
-import DashPageHeader from '../../components/ui/dashPageHeader'
-import { useAuth } from '../../contexts/authProvider'
-import { getDashboardData } from '../../queries/dashboardQueries'
-import { LoadingDots, LoadingWrapper, Spinner } from '../../styled/loader'
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+import React, { Fragment } from "react"
+import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import styled from "styled-components"
+import BulbIcon from "../../components/svgs/bulbIcon"
+import CreditCardIcon from "../../components/svgs/creditCard"
+import TickMarkIcon from "../../components/svgs/tickMark"
+import UsersIcon from "../../components/svgs/usersIcon"
+import DashPageHeader from "../../components/ui/dashPageHeader"
+import { useAuth } from "../../contexts/authProvider"
+import { getDashboardData } from "../../queries/dashboardQueries"
+import { LoadingDots, LoadingWrapper, Spinner } from "../../styled/loader"
+import { formatAmount } from "../../helpers/intl"
+import CrossIcon from "../../components/svgs/cross"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -30,17 +32,17 @@ const Dashboard = () => {
       <DashPageHeader
         name={
           hours < 12
-            ? 'Good Morning'
+            ? "Good Morning"
             : hours < 18
-            ? 'Good Afternoon'
-            : 'Good Evening'
+            ? "Good Afternoon"
+            : "Good Evening"
         }
         title={`${user.firstName && user.firstName} ${
           user.lastName && user.lastName
         }`}
       ></DashPageHeader>
       {isError ? (
-        <div className="align-center" style={{ height: '30vh' }}>
+        <div className="align-center" style={{ height: "30vh" }}>
           <h3>Failed to load Dashboard!</h3>
         </div>
       ) : isLoading ? (
@@ -68,7 +70,7 @@ const Dashboard = () => {
                     <div className="item">
                       <p className="label">
                         Active
-                        <span style={{ fontSize: '0.7rem', color: '#888' }}>
+                        <span style={{ fontSize: "0.7rem", color: "#888" }}>
                           &nbsp;(30 Days)
                         </span>
                       </p>
@@ -105,14 +107,14 @@ const Dashboard = () => {
                       <p className="label">Total</p>
                       <p className="value">
                         {(resumeReviewCount && `${resumeReviewCount.total}`) ||
-                          '-'}
+                          "-"}
                       </p>
                     </div>
                     <div className="item">
                       <p className="label">Last 24hrs</p>
                       <p className="value">
                         {(resumeReviewCount && `${resumeReviewCount.last24}`) ||
-                          '-'}
+                          "-"}
                       </p>
                     </div>
                     <div className="item">
@@ -120,14 +122,14 @@ const Dashboard = () => {
                       <p className="value">
                         {(resumeReviewCount &&
                           `${resumeReviewCount.outstanding}`) ||
-                          '-'}
+                          "-"}
                       </p>
                     </div>
                     <div className="item">
                       <p className="label">Urgent</p>
                       <p className="value">
                         {(resumeReviewCount && `${resumeReviewCount.urgent}`) ||
-                          '-'}
+                          "-"}
                       </p>
                     </div>
                   </div>
@@ -149,25 +151,25 @@ const Dashboard = () => {
                     <div className="item">
                       <p className="label">Total</p>
                       <p className="value">
-                        {(payment && `$${payment.total}`) || '-'}
+                        {(payment && `$${payment.total}`) || "-"}
                       </p>
                     </div>
                     <div className="item">
                       <p className="label">Refunds</p>
                       <p className="value">
-                        {(payment && `$${payment.refund}`) || '-'}
+                        {(payment && `$${payment.refund}`) || "-"}
                       </p>
                     </div>
                     <div className="item">
                       <p className="label">Stripe Fees</p>
                       <p className="value">
-                        {(payment && `$${payment.fee}`) || '-'}
+                        {(payment && `$${payment.fee}`) || "-"}
                       </p>
                     </div>
                     <div className="item">
                       <p className="label">Net Revenue</p>
                       <p className="value">
-                        {(payment && `$${payment.net}`) || '-'}
+                        {(payment && `$${payment.net}`) || "-"}
                       </p>
                     </div>
                   </div>
@@ -177,9 +179,9 @@ const Dashboard = () => {
               <SubContainer
                 data-test-id="info-payments"
                 style={{
-                  marginRight: '1.5rem',
-                  marginTop: '2.2rem',
-                  height: '425px',
+                  marginRight: "1.5rem",
+                  marginTop: "2.2rem",
+                  height: "425px",
                 }}
               >
                 <div>
@@ -192,24 +194,26 @@ const Dashboard = () => {
                           onClick={() => navigate(`/payments/${item.id}`)}
                         >
                           <div className="details-wrapper">
-                            <PaymentIconWrapper>
-                              <TickMarkIcon />
+                            <PaymentIconWrapper paid={item.status === "paid"}>
+                              {item.status === "paid" ? (
+                                <TickMarkIcon />
+                              ) : (
+                                <CrossIcon size="0.6em" />
+                              )}
                             </PaymentIconWrapper>
                             <div>
-                              <p>
-                                {(item.email && item.email) ||
-                                  (item.customer && item.customer) ||
-                                  '-'}
-                              </p>
+                              <p>{item.email || item.customer || "-"}</p>
                               <p className="label">{item.id}</p>
                             </div>
                           </div>
                           <div>
-                            <p>${item.amount}</p>
+                            <p>{formatAmount(item.currency, item.total)}</p>
                           </div>
                           <div>
                             <p>
-                              {(item.date && dayjs(item.date).fromNow()) || '-'}
+                              {(item.created &&
+                                dayjs(item.created).fromNow()) ||
+                                "-"}
                             </p>
                           </div>
                         </PaymentWrapper>
@@ -228,7 +232,7 @@ const Dashboard = () => {
             </div>
             <RHSWrapper>
               <SubContainer
-                style={{ height: '400px' }}
+                style={{ height: "400px" }}
                 data-test-id="info-signups"
               >
                 <div>
@@ -259,7 +263,7 @@ const Dashboard = () => {
                 </Footer>
               </SubContainer>
               <SubContainer
-                style={{ height: '525px' }}
+                style={{ height: "525px" }}
                 data-test-id="info-blogs"
               >
                 <div>
@@ -495,7 +499,7 @@ const UserWrapper = styled.div`
     flex-direction: column;
   }
 `
-const PaymentIconWrapper = styled.div`
+const PaymentIconWrapper = styled.div<{ paid: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -503,7 +507,8 @@ const PaymentIconWrapper = styled.div`
   height: 30px;
   border-radius: 50%;
   margin-right: 1rem;
-  background-color: ${({ theme }) => theme.shades.success};
+  background-color: ${({ theme, paid }) =>
+    !paid ? theme.shades.danger : theme.shades.success};
   svg path {
     fill: ${({ theme }) => theme.colors.success};
   }
