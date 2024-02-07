@@ -1,25 +1,25 @@
-import dayjs from 'dayjs'
-import React, { Fragment, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-import { getUserPayments } from '../../queries/paymentQueries'
-import { Badge } from '../../styled/badge'
-import { Button } from '../../styled/button'
-import { LoadingDots, LoadingWrapper, Spinner } from '../../styled/loader'
-import { TableList } from '../../styled/table'
+import dayjs from "dayjs"
+import React, { Fragment, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import styled from "styled-components"
+import { getUserPayments } from "../../queries/paymentQueries"
+import { Badge } from "../../styled/badge"
+import { Button } from "../../styled/button"
+import { LoadingDots, LoadingWrapper, Spinner } from "../../styled/loader"
+import { TableList } from "../../styled/table"
 
 const Payments = ({ id }: { id: string }) => {
   const [page, setPage] = useState(0)
   const navigate = useNavigate()
   const { data, isLoading, isError } = getUserPayments(id, page, !!id)
 
-  const handlePage = (type: 'next' | 'prev') => {
-    type === 'next' && setPage((page) => page + 1)
-    type === 'prev' && setPage((page) => page - 1)
+  const handlePage = (type: "next" | "prev") => {
+    type === "next" && setPage((page) => page + 1)
+    type === "prev" && setPage((page) => page - 1)
   }
 
   const Empty = (
-    <div className="align-center" style={{ height: '30vh' }}>
+    <div className="align-center" style={{ height: "30vh" }}>
       <h3>No Past Payments!</h3>
     </div>
   )
@@ -29,7 +29,7 @@ const Payments = ({ id }: { id: string }) => {
     return (
       <Fragment>
         {isError ? (
-          <div className="align-center" style={{ height: '30vh' }}>
+          <div className="align-center" style={{ height: "30vh" }}>
             <h3>Failed to load payments!</h3>
           </div>
         ) : isLoading ? (
@@ -44,12 +44,12 @@ const Payments = ({ id }: { id: string }) => {
                 <TableList>
                   <thead>
                     <tr>
-                      <th style={{ width: 'auto' }}>ID</th>
-                      <th style={{ width: '15%' }}>Plan</th>
-                      <th style={{ width: '10%' }}>Amount</th>
-                      <th style={{ width: '15%' }}>Status</th>
-                      <th style={{ width: '18%' }}>Card</th>
-                      <th style={{ width: '18%' }}>Date</th>
+                      <th style={{ width: "auto" }}>ID</th>
+                      <th style={{ width: "15%" }}>Plan</th>
+                      <th style={{ width: "10%" }}>Amount</th>
+                      <th style={{ width: "15%" }}>Status</th>
+                      <th style={{ width: "18%" }}>Card</th>
+                      <th style={{ width: "18%" }}>Date</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -59,10 +59,10 @@ const Payments = ({ id }: { id: string }) => {
                         className="hover"
                         onClick={() => navigate(`/payments/${item.id}`)}
                       >
-                        <td>{item.id || '-'}</td>
-                        <td className="capitalize">{item.plan_name || '-'}</td>
+                        <td>{item.id || "-"}</td>
+                        <td className="capitalize">{item.plan_name || "-"}</td>
                         <td>
-                          ${item.amount || '0.00'}&nbsp;
+                          ${item.amount || "0.00"}&nbsp;
                           {item.currency && item.currency}
                         </td>
                         <td className="capitalize">
@@ -72,7 +72,7 @@ const Payments = ({ id }: { id: string }) => {
                                 Refunded
                               </Badge>
                               <span className="redund-amt">
-                                ${item.amount_refunded || '0.00'}&nbsp;refunded
+                                ${item.amount_refunded || "0.00"}&nbsp;refunded
                               </span>
                             </RefundWrapper>
                           ) : item.amount_refunded > 0 ? (
@@ -88,13 +88,13 @@ const Payments = ({ id }: { id: string }) => {
                             <Badge
                               size="sm"
                               type={
-                                item.status === 'succeeded'
-                                  ? 'success'
-                                  : item.status === 'cancelled'
-                                  ? 'ghost'
-                                  : item.status === 'failed'
-                                  ? 'danger'
-                                  : 'info'
+                                item.status === "succeeded"
+                                  ? "success"
+                                  : item.status === "canceled"
+                                  ? "ghost"
+                                  : item.status === "failed"
+                                  ? "danger"
+                                  : "info"
                               }
                             >
                               {item.status}
@@ -114,7 +114,7 @@ const Payments = ({ id }: { id: string }) => {
                           </Card>
                         </td>
                         <td>
-                          {dayjs(item.date).format('DD MMM YYYY, hh:mm a')}
+                          {dayjs(item.date).format("DD MMM YYYY, hh:mm a")}
                         </td>
                       </tr>
                     ))}
@@ -124,14 +124,14 @@ const Payments = ({ id }: { id: string }) => {
                   <Button
                     btnType="secondary"
                     disabled={page === 0}
-                    onClick={() => handlePage('prev')}
+                    onClick={() => handlePage("prev")}
                   >
                     Previous
                   </Button>
                   <Button
                     btnType="secondary"
                     disabled={!data.has_more}
-                    onClick={() => handlePage('next')}
+                    onClick={() => handlePage("next")}
                   >
                     Next
                   </Button>

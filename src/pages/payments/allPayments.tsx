@@ -1,49 +1,49 @@
-import dayjs from 'dayjs'
-import React, { Fragment, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-import CrossIcon from '../../components/svgs/cross'
-import DashPageHeader from '../../components/ui/dashPageHeader'
-import Search from '../../components/ui/search'
-import Select from '../../components/ui/select'
+import dayjs from "dayjs"
+import React, { Fragment, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import styled from "styled-components"
+import CrossIcon from "../../components/svgs/cross"
+import DashPageHeader from "../../components/ui/dashPageHeader"
+import Search from "../../components/ui/search"
+import Select from "../../components/ui/select"
 import {
   getPayments,
   IGetPaymentQueryParams,
-} from '../../queries/paymentQueries'
-import { Badge } from '../../styled/badge'
-import { Button } from '../../styled/button'
-import { LoadingDots, LoadingWrapper, Spinner } from '../../styled/loader'
-import { TableList } from '../../styled/table'
+} from "../../queries/paymentQueries"
+import { Badge } from "../../styled/badge"
+import { Button } from "../../styled/button"
+import { LoadingDots, LoadingWrapper, Spinner } from "../../styled/loader"
+import { TableList } from "../../styled/table"
 
 const searchOptions = [
-  { label: 'User ID', name: 'user_id' },
-  { label: 'Payment ID', name: 'invoice_id' },
-  { label: 'Customer ID', name: 'customer' },
-  { label: 'Subscription ID', name: 'subscription' },
+  { label: "User ID", name: "user_id" },
+  { label: "Payment ID", name: "invoice_id" },
+  { label: "Customer ID", name: "customer" },
+  { label: "Subscription ID", name: "subscription" },
 ]
 
 const AllPayments = () => {
   const [page, setPage] = useState(0)
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState("")
   const [searchByValue, setSearchByValue] = useState(searchOptions[0].name)
   const [query, setQuery] = useState<string | undefined>(undefined)
-  const [cacheRef, setCacheRef] = useState<'all_list' | 'search_list'>(
-    'all_list'
+  const [cacheRef, setCacheRef] = useState<"all_list" | "search_list">(
+    "all_list"
   )
-  const [nextPageId, setNextPageId] = useState('')
-  const [startAfter, setStartAfter] = useState('')
+  const [nextPageId, setNextPageId] = useState("")
+  const [startAfter, setStartAfter] = useState("")
 
   const navigate = useNavigate()
 
   const createQuery = (feild: string) => {
     switch (feild) {
-      case 'user_id':
+      case "user_id":
         return `user_id:"${searchValue}"`
-      case 'customer':
+      case "customer":
         return `customer:"${searchValue}"`
-      case 'subscription':
+      case "subscription":
         return `subscription:"${searchValue}"`
-      case 'invoice_id':
+      case "invoice_id":
         return `invoice_id:"${searchValue}"`
       default:
         return undefined
@@ -68,38 +68,38 @@ const AllPayments = () => {
   useEffect(() => {
     if (!data) return
     if (data.start_after) {
-      setCacheRef('all_list')
+      setCacheRef("all_list")
       setStartAfter(data.start_after)
     }
     if (data.next_page) {
-      setCacheRef('search_list')
+      setCacheRef("search_list")
       setNextPageId(data.next_page)
     }
     return
   }, [data])
 
   useEffect(() => {
-    setSearchValue('')
+    setSearchValue("")
   }, [searchByValue])
 
   const handleReset = () => {
     setSearchByValue(searchOptions[0].name)
-    setSearchValue('')
+    setSearchValue("")
     setQuery(undefined)
   }
 
-  const handlePage = (type: 'next' | 'prev') => {
-    type === 'next' && setPage((page) => page + 1)
-    type === 'prev' && setPage((page) => page - 1)
+  const handlePage = (type: "next" | "prev") => {
+    type === "next" && setPage((page) => page + 1)
+    type === "prev" && setPage((page) => page - 1)
   }
 
   const handleSearch = () => {
-    if (searchValue.length === 0) setQuery('')
+    if (searchValue.length === 0) setQuery("")
     else setQuery(createQuery(searchByValue))
   }
 
   const Empty = (
-    <div className="align-center" style={{ height: '30vh' }}>
+    <div className="align-center" style={{ height: "30vh" }}>
       <h3>No Payments Found!</h3>
     </div>
   )
@@ -116,7 +116,7 @@ const AllPayments = () => {
       <DashPageHeader title="Payments" border></DashPageHeader>
       <Wrapper>
         {isError ? (
-          <div className="align-center" style={{ height: '30vh' }}>
+          <div className="align-center" style={{ height: "30vh" }}>
             <h3>Failed to load Payments!</h3>
           </div>
         ) : isLoading && page === 0 ? (
@@ -127,15 +127,15 @@ const AllPayments = () => {
               <div className="action-item">
                 <Search
                   placeholder={
-                    searchByValue === 'customer'
-                      ? 'eg: cus_Li9Ymb5d9o2wPI'
-                      : searchByValue === 'subscription'
-                      ? 'eg: sub_1L0qZEIh2DuAq8sftOrbrsAm'
-                      : searchByValue === 'invoice_id'
-                      ? 'eg: in_1L1FTHIh2DuAq8sfNZZiFmJM'
-                      : searchByValue === 'user_id'
-                      ? 'eg: 61c78fea0355ed7123fe0700'
-                      : 'Search'
+                    searchByValue === "customer"
+                      ? "eg: cus_Li9Ymb5d9o2wPI"
+                      : searchByValue === "subscription"
+                      ? "eg: sub_1L0qZEIh2DuAq8sftOrbrsAm"
+                      : searchByValue === "invoice_id"
+                      ? "eg: in_1L1FTHIh2DuAq8sfNZZiFmJM"
+                      : searchByValue === "user_id"
+                      ? "eg: 61c78fea0355ed7123fe0700"
+                      : "Search"
                   }
                   value={searchValue}
                   setValue={setSearchValue}
@@ -158,7 +158,7 @@ const AllPayments = () => {
                   onClick={() => handleReset()}
                 >
                   <CrossIcon size="0.7rem" />
-                  <span style={{ marginLeft: '0.5rem' }}>Reset</span>
+                  <span style={{ marginLeft: "0.5rem" }}>Reset</span>
                 </Button>
               </div>
             </ActionsWrapper>
@@ -166,12 +166,12 @@ const AllPayments = () => {
               <TableList>
                 <thead>
                   <tr>
-                    <th style={{ width: 'auto' }}>ID</th>
-                    <th style={{ width: '15%' }}>Plan</th>
-                    <th style={{ width: '10%' }}>Amount</th>
-                    <th style={{ width: '15%' }}>Status</th>
-                    <th style={{ width: '18%' }}>Card</th>
-                    <th style={{ width: '18%' }}>Date</th>
+                    <th style={{ width: "auto" }}>ID</th>
+                    <th style={{ width: "15%" }}>Plan</th>
+                    <th style={{ width: "10%" }}>Amount</th>
+                    <th style={{ width: "15%" }}>Status</th>
+                    <th style={{ width: "18%" }}>Card</th>
+                    <th style={{ width: "18%" }}>Date</th>
                   </tr>
                 </thead>
                 {data && data.items && data.items.length > 0 && (
@@ -181,10 +181,10 @@ const AllPayments = () => {
                         key={i}
                         onClick={() => navigate(`/payments/${item.id}`)}
                       >
-                        <td>{item.id || '-'}</td>
-                        <td className="capitalize">{item.plan_name || '-'}</td>
+                        <td>{item.id || "-"}</td>
+                        <td className="capitalize">{item.plan_name || "-"}</td>
                         <td>
-                          ${item.amount || '0.00'}&nbsp;
+                          ${item.amount || "0.00"}&nbsp;
                           {item.currency && item.currency}
                         </td>
                         <td className="capitalize">
@@ -204,13 +204,13 @@ const AllPayments = () => {
                             <Badge
                               size="sm"
                               type={
-                                item.status === 'succeeded'
-                                  ? 'success'
-                                  : item.status === 'cancelled'
-                                  ? 'ghost'
-                                  : item.status === 'failed'
-                                  ? 'danger'
-                                  : 'info'
+                                item.status === "succeeded"
+                                  ? "success"
+                                  : item.status === "canceled"
+                                  ? "ghost"
+                                  : item.status === "failed"
+                                  ? "danger"
+                                  : "info"
                               }
                             >
                               {item.status}
@@ -230,10 +230,10 @@ const AllPayments = () => {
                               {item.method.last4}
                             </Card>
                           )) ||
-                            'card'}
+                            "card"}
                         </td>
                         <td>
-                          {dayjs(item.date).format('DD MMM YYYY, hh:mm a')}
+                          {dayjs(item.date).format("DD MMM YYYY, hh:mm a")}
                         </td>
                       </tr>
                     ))}
@@ -248,14 +248,14 @@ const AllPayments = () => {
                   <Button
                     btnType="secondary"
                     disabled={page === 0}
-                    onClick={() => handlePage('prev')}
+                    onClick={() => handlePage("prev")}
                   >
                     Previous
                   </Button>
                   <Button
                     btnType="secondary"
                     disabled={!data.has_more}
-                    onClick={() => handlePage('next')}
+                    onClick={() => handlePage("next")}
                   >
                     Next
                   </Button>
