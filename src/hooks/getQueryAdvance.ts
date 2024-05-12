@@ -7,7 +7,7 @@ const getQueryAdvance = (
   enabled = true,
   params?: any
 ) => {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
 
   return useQuery(identifier, fetcher, {
     enabled: !!token && enabled,
